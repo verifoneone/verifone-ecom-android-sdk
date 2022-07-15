@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+   <string name="payment_options_title" translatable="false">Payment options</string>
+
+   <string name="accountVerificationMessage">ASK FOR INFORMATION,NO AMOUNT WILL BE DEBITED FROM YOUR ACCOUNT</string>
+   <string name="amountExpr">Amount</string>
+   <string name="binLookupLoadingText">Verifying...</string>
+   <string name="brandNotValid">Allowed card brands</string>
+   <string name="cardExpired">Card is expired</string>
+   <string name="cardExpiryDateFormat">Invalid date. Format: mm/yy</string>
+   <string name="cardExpiryLabel">Expiration date</string>
+   <string name="cardNumberLabel">Card number</string>
+   <string name="cardNumberPlaceholder">Your card number</string>
+   <string name="cardTitle">Credit card</string>
+   <string name="save_details_label">Save details for next time</string>
+   <string name="chooseCardBrand">Choose card brand</string>
+   <string name="phoneNumberLabel">Phone number</string>
+   <string name="phoneNumberPlaceholder">Your phone number</string>
+   <string name="customerText">Customer</string>
+   <string name="cvv3NotValid">CVV number should contain 3 digits</string>
+   <string name="cvv4NotValid">CVV number should contain 4 digits</string>
+   <string name="cvvLabel">CVV</string>
+   <string name="cvvNotValid">CVV number is not valid</string>
+   <string name="cvvPlaceholder3">CVV</string>
+   <string name="cvvPlaceholder4">CVV</string>
+   <string name="cvvPlaceholderForMail">Disabled for MAIL</string>
+   <string name="dynamicDescriptorText">Descriptor</string>
+   <string name="showDetailsText">Show details</string>
+   <string name="hideDetailsText">Hide details</string>
+   <string name="expiryPlaceholder">MM/YY</string>
+   <string name="footerText">Secure payments provided by Verifone</string>
+   <string name="languageName">English</string>
+   <string name="lengthNotValid">Card number length is not valid</string>
+   <string name="codelengthNotValid">Mobile code number length is not valid</string>
+   <string name="merchantReferenceText">Reference</string>
+   <string name="monthNotValid">Expiration month must be a value between 1 and 12</string>
+   <string name="nrNotValid">Card number is not valid</string>
+   <string name="mobileCodeNotValid">Mobile code is not valid</string>
+   <string name="phoneNumberNotValid">Phone number is not valid</string>
+   <string name="submitPay">Pay</string>
+   <string name="submitTitle">Confirm</string>
+   <string name="productNotValid">The product associated with your card is not accepted</string>
+   <string name="serviceError">Failed to handle your request. Please try again. If the error persists, please contact the merchant</string>
+   <string name="yearNotValid">Expiration year cannot exceed</string>
+   <string name="paymentSuccessMessageText">Thank you for your payment</string>
+   <string name="paymentNotFoundMessageText">Payment not found</string>
+   <string name="paymentExpiredMessageText">Payment expired</string>
+   <string name="paymentExpiredInfoText">The payment has expired, return to the store to try again</string>
+   <string name="paymentFailedMessageText">Payment failed</string>
+   <string name="returnToMerchantMessageText">Continue back to store</string>
+   <string name="backToMethodSelectionText">Back to payment method selection</string>
+   <string name="returnToMerchantInfoText">If you are not automatically redirected to merchant page in 10sec, please click on \'Continue back to store\'</string>
+   <string name="paymentSelectTitle">Select payment method</string>
+
+   <string name="paymentProductTitleCard">Credit card</string>
+   <string name="paymentProductTitlePaypal">PayPal</string>
+   <string name="paymentProductTitleGooglePay">Google Pay</string>
+   <string name="paymentProductTitleKlarna">Klarna</string>
+   <string name="paymentProductTitleVipps">Vipps</string>
+   <string name="paymentProductTitleSwish">Swish</string>
+   <string name="paymentProductTitleMobilePay">MobilePay</string>
+    <string name="paymentProductTitleCrypto">Crypto"</string>
+
+   <string name="identityCardNumberLengthNotValid">Identity Card number should contain 7-9 digits</string>
+   <string name="identityCardNumberNotValid">Identity Card number is not valid</string>
+   <string name="identityCardNumberLabel">Personal ID</string>
+   <string name="identityCardNumberPlaceholder">Personal ID</string>
+   <string name="numberOfInstalments">Number of instalments</string>
+   <string name="splitTransactionIntoPayments">Split transaction in at maximum %s payments</string>
+   <string name="transaction">Transaction</string>
+   <string name="transactionInsufficientFunds">Insufficient funds</string>
+   <string name="transactionIncorrectCardInformation">Incorrect Card information</string>
+   <string name="transactionIncorrectCVV">Incorrect CVV</string>
+   <string name="singlePaymentText">First instalment – %s</string>
+   <string name="twoInstalmentsText">Remaining instalment – %s</string>
+   <string name="multipleInstalmentsText">Remaining instalments – %s each</string>
+   <string name="consentTextRequiredMessage">Please provide your consent in order to proceed</string>
+   <string name="checkoutExpires">Checkout expires in [[seconds]] seconds</string>
+   <string name="swishSubmitText">Continue with Swish</string>
+   <string name="swishConfirmInAppMessage">You will need to confirm the payment in your Swish app</string>
+   <string name="swishLoaderMessage">Check your swish app for a payment request</string>
+   <string name="swishPhoneNumberDescription">You will need to add your phone number with prefix e.g : 4671235678</string>
+   <string name="fish">Fish</string>
+   <string name="transactionDeclinedMessage">The transaction has been declined by the acquirer. The request reached the acquirer, but it was not accepted. An acquirer response code is available in the details property.</string>
+   <string name="transactionFailedMessage">The transaction has been rejected by the processor. The request reached the processor, but it failed the validation checks required by the processor. Please examine your request. If the error persists, contact an administrator.</string>
+   <string name="sellerText">Seller</string>
+   <string name="redirectToMerchantInfoText">Please do not close the browser, we will redirect you to the merchant website in [[seconds]] seconds</string>
+   <string name="paymentInProgress">Please do not close this page until the payment is finished.</string>
+   <string name="brandNotFoundError">Your card is not supported for this payment, please try using another card</string>
+   <string name="closeThePageText">Thank you for the information provided, you can safely close the page</string>
+    <string name="cancelButtonText">Return to store"</string>
+</resources>

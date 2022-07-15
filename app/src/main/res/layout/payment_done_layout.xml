@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_background_grey"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.Guideline
+        android:orientation="horizontal"
+        android:id="@+id/top_guide"
+        app:layout_constraintGuide_percent=".05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_data_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/container_shape"
+        android:paddingTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".85"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_guide"
+        app:layout_constraintWidth_percent=".9">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/separator_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".13" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/verifone_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/sv_verifone_logo"
+            app:layout_constraintHeight_percent=".06"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".47" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/transaction_value_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="12dp"
+            android:text="10 eur"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/verifone_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/verifone_logo" />
+
+        <View
+            android:id="@+id/separator_top"
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:background="@color/light_border_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator_guide"
+            app:layout_constraintWidth_percent=".9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guide_im"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".22" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/transaction_done_im"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/circle_shape"
+            android:padding="23dp"
+            android:src="@drawable/check_mark"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".175"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_guide_im"
+            app:layout_constraintWidth_percent=".3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/user_message_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/user_message_text"
+            android:textColor="@color/form_text_black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transaction_done_im" />
+
+
+        <View
+            android:id="@+id/separator_middle"
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:background="@color/light_border_grey"
+            app:layout_constraintBottom_toTopOf="@id/transaction_data_guide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_message_label_tv"
+            app:layout_constraintWidth_percent=".9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/transaction_data_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".56" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/transaction_data_guide_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".06" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/transaction_data_guide_vertical2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".94" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/customer_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/customer_label"
+            android:textColor="@color/form_text_black"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/transaction_data_guide_vertical"
+            app:layout_constraintTop_toBottomOf="@id/transaction_data_guide" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/customer_value_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="john doe"
+            android:textColor="@color/form_text_grey"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintEnd_toStartOf="@id/transaction_data_guide_vertical2"
+            app:layout_constraintTop_toTopOf="@id/customer_label_tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/amount_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/amount_text"
+            android:textColor="@color/form_text_black"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/transaction_data_guide_vertical"
+            app:layout_constraintTop_toBottomOf="@id/customer_value_tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/amount_value_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="$10"
+            android:textColor="@color/form_text_grey"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintEnd_toStartOf="@id/transaction_data_guide_vertical2"
+            app:layout_constraintTop_toTopOf="@id/amount_label_tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/reference_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/reference_label"
+            android:textColor="@color/form_text_black"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/transaction_data_guide_vertical"
+            app:layout_constraintTop_toBottomOf="@id/amount_value_tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/reference_value_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:gravity="end"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/form_text_grey"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintStart_toEndOf="@id/reference_label_tv"
+            app:layout_constraintEnd_toStartOf="@id/transaction_data_guide_vertical2"
+            app:layout_constraintTop_toTopOf="@id/reference_label_tv" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back_to_store"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="9dp"
+            android:background="@drawable/pay_button_shape"
+            android:text="@string/back_to_store"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/transaction_data_guide_vertical2"
+            app:layout_constraintHeight_percent=".07"
+            app:layout_constraintStart_toEndOf="@id/transaction_data_guide_vertical"
+            app:layout_constraintTop_toBottomOf="@id/reference_value_tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/company_message_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/company_message"
+            android:textColor="@color/form_text_black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/back_to_store"
+            app:layout_constraintStart_toStartOf="@id/back_to_store"
+            app:layout_constraintTop_toBottomOf="@id/back_to_store" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

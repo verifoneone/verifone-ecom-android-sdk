@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="light_border_grey">#EEF0F2</color>
+    <color name="light_background_grey">#F9FAFB</color>
+    <color name="form_text_black">#474B50</color>
+    <color name="form_text_grey">#8B9196</color>
+    <color name="btn_background">#80A6BF</color>
+    <color name="data_section_color">#A9A6AF</color>
+</resources>

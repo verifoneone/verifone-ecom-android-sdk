@@ -1,0 +1,110 @@
+<resources>
+    <string name="app_name" translatable="false">VerifoneMobileAndroid</string>
+    <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
+    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
+    <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+
+
+    <string name="pay_flow_label" translatable="false">Payment</string>
+    <string name="use_paypal_label" translatable="false">Use paypal</string>
+
+    <string name="close_label" translatable="false">OK</string>
+    <string name="reference_label" translatable="false">Reference</string>
+    <string name="customer_label" translatable="false">Customer</string>
+    <string name="amount_text" translatable="false">Amount</string>
+    <string name="user_message_text" translatable="false">Thank you for your payment</string>
+    <string name="back_to_store" translatable="false">Continue back to store</string>
+    <string name="company_message" translatable="false">Secure payments provided by Verifone</string>
+    <string name="title_settings" translatable="false">Settings</string>
+
+    <string name="settings_background_text" translatable="false">Form background color</string>
+    <string name="settings_text_field_text" translatable="false">Text field background color</string>
+    <string name="settings_text_color_input" translatable="false">Input text color</string>
+    <string name="settings_hint_color_text" translatable="false">Hint text color</string>
+    <string name="settings_pay_btn_color" translatable="false">Pay button color</string>
+    <string name="settings_form_title_color" translatable="false">Title text color</string>
+    <string name="settings_checkout_label" translatable="false">Checkout customization</string>
+
+    <string name="settings_jwt_key_hint" translatable="false">Public Key alias</string>
+    <string name="settings_jwt_contract_id_hint" translatable="false">3DS Contract ID</string>
+    <string name="settings_card_encryption_key" translatable="false">Public encryption key</string>
+    <string name="settings_lookup_postal_code" translatable="false">Postal code for lookup request</string>
+    <string name="settings_lookup_state" translatable="false">State for lookup request</string>
+    <string name="settings_lookup_city" translatable="false">City for lookup request</string>
+    <string name="settings_lookup_currency_code" translatable="false">Currency code for card payments</string>
+    <string name="settings_lookup_threeds_contract_id" translatable="false">3ds contract id for lookup request</string>
+    <string name="settings_lookup_merchant_reference" translatable="false">Merchant reference for lookup request</string>
+    <string name="settings_card_payments_provider_contract" translatable="false">Payment provider contract</string>
+    <string name="settings_card_payments_dynamic_descriptor" translatable="false">Dynamic descriptor for card payments</string>
+    <string name="settings_card_payments_api_user_name" translatable="false">Payments API user ID</string>
+    <string name="settings_card_payments_api_key" translatable="false">Payments API key</string>
+    <string name="settings_card_payments_reuse_token_key_alias" translatable="false">Key alias for create reuse token request</string>
+    <string name="settings_card_payments_reuse_token_ppc" translatable="false">Payment provider contract for reuse token pay</string>
+    <string name="settings_card_payments_reuse_token_expiry" translatable="false">Expiry for create reuse token request</string>
+    <string name="settings_card_payments_reuse_token_scope" translatable="false">Reuse token scope</string>
+    <string name="settings_card_payments_reuse_token_public_key" translatable="false">Public key for create reuse token</string>
+    <string name="settings_card_payments_reuse_token_api_name" translatable="false">API user name for create reuse token request</string>
+    <string name="settings_card_payments_reuse_token_api_key" translatable="false">API key for create reuse token request</string>
+
+    <string name="settings_card_payments_with_reuse_token_api_userid" translatable="false">API user id for pay with reuse token</string>
+    <string name="settings_card_payments_with_reuse_token_api_key" translatable="false">API key for pay with reuse token request</string>
+
+    <string name="settings_google_pay_ppc" translatable="false">Payment provider contract for google pay</string>
+    <string name="settings_google_pay_customer_ip" translatable="false">Customer IP for google pay</string>
+    <string name="settings_google_pay_shopper_interaction" translatable="false">Shopper interaction for google pay</string>
+    <string name="settings_google_pay_dynamic_descriptor" translatable="false">Dynamic descriptor for google pay</string>
+    <string name="settings_google_pay_merchant_reference" translatable="false">Merchant reference for google pay</string>
+    <string name="settings_google_pay_api_user_name" translatable="false">API user name for google pay</string>
+    <string name="settings_google_pay_api_key" translatable="false">API key for google pay</string>
+
+    <string name="settings_google_pay_input_country" translatable="false">Country code for google pay</string>
+    <string name="settings_google_pay_input_currency" translatable="false">Currency code for google pay</string>
+    <string name="settings_google_pay_gateway" translatable="false">Gateway for google pay</string>
+    <string name="settings_google_pay_gateway_merchant_id" translatable="false">Gateway merchant ID</string>
+    <string name="settings_google_pay_merchant_name" translatable="false">Merchant name</string>
+    <string name="settings_google_pay_merchant_id" translatable="false">Merchant ID</string>
+
+    <string name="settings_paypal_ppc" translatable="false">Payment provider contract for paypal</string>
+    <string name="settings_paypal_merchant_reference" translatable="false">Merchant reference for paypal</string>
+    <string name="settings_paypal_dynamic_descriptor" translatable="false">Dynamic descriptor for paypal</string>
+    <string name="settings_paypal_api_user_id" translatable="false">User ID for paypal API</string>
+    <string name="settings_paypal_api_key" translatable="false">Auth key for paypal API</string>
+
+    <string name="settings_card_payments_tab_tile" translatable="false">Card payments parameters</string>
+    <string name="settings_paypal_tab_tile" translatable="false">Paypal parameters</string>
+    <string name="settings_google_input_tab_tile" translatable="false">Google pay object parameters</string>
+    <string name="settings_google_pay_tab_tile" translatable="false">Google pay request parameters</string>
+
+    <string name="settings_show_recurrent" translatable="false">Show recurrent payments switch</string>
+    <string name="save_label" translatable="false">Save</string>
+    <string name="ok_label" translatable="false">OK</string>
+    <string name="cancel_label" translatable="false">Cancel</string>
+    <string name="remove_stored_card" translatable="false">Remove card details</string>
+    <string name="change_lang" translatable="false">Change language</string>
+    <string name="current_lang" translatable="false">Language:</string>
+    <string name="choose_label" translatable="false">Choose language</string>
+    <string name="change_font_text" translatable="false">Checkout font</string>
+    <string name="change_region_text" translatable="false">Region(Environment)</string>
+    <string name="checkout_pay_options" translatable="false">Payment methods</string>
+    <string name="no_payment_options" translatable="false">No payment options selected</string>
+    <string name="google_pay_fail" translatable="false">Google pay failed</string>
+    <string name="threeds_auth_enable" translatable="false">Enable 3DS</string>
+    <string-array name="fonts_array">
+        <item>Default</item>
+        <item>Oswald</item>
+        <item>OpenSans</item>
+        <item>Pacifico</item>
+        <item>QuickSand</item>
+        <item>Roboto</item>
+    </string-array>
+
+    <string-array name="regions_array">
+        <item>CST</item>
+        <item>US CST</item>
+        <item>EMEA PROD</item>
+        <item>US PROD</item>
+        <item>NZ PROD</item>
+    </string-array>
+
+</resources>

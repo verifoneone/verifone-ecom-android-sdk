@@ -1,0 +1,4 @@
+include ':VerifoneAndroidLIB'
+include ':app'
+include ':ThreedsHelper'
+rootProject.name = "VerifoneAndroidRoot"
