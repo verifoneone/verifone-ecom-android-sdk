@@ -1,4 +1,4 @@
-# Verifone iOS SDK
+# Verifone Android SDK
 
 Verifone SDKs provide the ability to encrypt and validate card payments, handles 3D Secure verification and interacts with alternative payment methods.  
 
