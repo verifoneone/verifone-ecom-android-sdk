@@ -364,14 +364,6 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
             showRecurrent,
             customizationParam
         )
-        /*val formConfigData = PaymentConfigurationData(
-            this,
-
-            publicKey,
-            showRecurrent,
-            customizationParam,
-            "Export"
-        )*/
 
 
         setLocation(false)
@@ -483,8 +475,7 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
     private fun displayGarment(garment: JSONObject) {
         detailTitle.text = garment.getString("title")
         //detailPrice.text = "\$${garment.getString("price")}"
-
-        val len = detailPrice.text.length
+        
         val price = 10.0//detailPrice.text.subSequence(1,len)
         detailPrice.text = "$price $currencyTV"
         amount = price.toString().toDouble()

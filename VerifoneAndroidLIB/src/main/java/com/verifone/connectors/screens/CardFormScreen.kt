@@ -1,7 +1,9 @@
 package com.verifone.connectors.screens
 
+import android.R.attr.*
 import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -21,15 +23,15 @@ import com.verifone.connectors.datapack.configuration.PayerCardData
 import com.verifone.connectors.util.CardEncryption
 import com.verifone.connectors.util.CreditCardInputResult
 import com.verifone.connectors.util.VerifoneCardValidator
+import java.io.IOException
+import java.io.NotSerializableException
 import java.io.Serializable
+
 
 internal class CardFormScreen():DialogFragment() {
 
     companion object {
-        val keyCardEditInput = "cardEditInput"
-        val keyCVCEditInput = "cvcEditInput"
-        val keyExpiryEditInput = "expiryEditInput"
-        val keyPayerNameEditInput = "payerNameEditInput"
+
         fun encryptCardDetails(expiryMonthParam: Int,
                                expiryYearParam: Int,
                                cardNumberParam: String,
@@ -40,7 +42,7 @@ internal class CardFormScreen():DialogFragment() {
         }
     }
 
-    class CallbackActionKeeper(var onCardInput: (inputResult:CreditCardInputResult) -> Unit?):Serializable
+    class CallbackActionKeeper(var onCardInput: (inputResult:CreditCardInputResult) -> Unit):Serializable
     constructor(ctx: Context,
                 customizationParam: FormUICustomizationData,
                 showRecurrent: Boolean,
@@ -55,6 +57,7 @@ internal class CardFormScreen():DialogFragment() {
         showRecurrentOption = showRecurrent
         customizationData = customizationParam
         onCardInputDone = onCardInputComplete
+        callbackKeeper = CallbackActionKeeper(onCardInputDone)
         payButtonText = payButtonLabel
     }
 
@@ -65,7 +68,7 @@ internal class CardFormScreen():DialogFragment() {
     private var colorCodeInputText:Int =-1
     private var colorCodeTextInputField: Int = -1
     private var colorCodeContainer: Int = -1
-
+    var callbackKeeper:CallbackActionKeeper? = null
     private var expValid: Boolean = false
     private var validResult: Boolean = false
     private var showFieldErrors:Boolean = false
@@ -173,7 +176,7 @@ internal class CardFormScreen():DialogFragment() {
         } else {
             payButton.text = payButtonText
         }
-
+        customizeForm()
         expiryDateEdit.addTextChangedListener(expiryDateWatcher)
         expiryDateEdit.setOnClickListener {
             expiryDateEdit.text?.let { it1 -> expiryDateEdit.setSelection(it1.length) }
@@ -189,14 +192,25 @@ internal class CardFormScreen():DialogFragment() {
             if (cardNr.length>=15 && isCardValid) {
                 creditCardValid = true
             }
+
             val expiryValid = VerifoneCardValidator.validateExpiryDate(
                 selectedMonth,
                 selectedYear
             )
+            if (!expiryValid){
+                expiryDateInputLayout.isErrorEnabled = true
+                expiryDateHintTV.setTextColor(resources.getColor(R.color.error_red))
+                expiryDateInputLayout.error = getString(R.string.cardExpired)
+            } else {
+                expiryDateInputLayout.isErrorEnabled = false
+                expiryDateHintTV.setTextColor(colorCodeHint)
+
+            }
+
             var cvcValid = false
 
             val cvcInput = cvcNumberInput.text.toString()
-            if (cvcInput.length == secureCodeLength) {
+            if (cvcInput.length >= secureCodeLength) {
                 cvcValid = true
             }
 
@@ -221,6 +235,7 @@ internal class CardFormScreen():DialogFragment() {
 
             if (!cvcValid) {
                 cvcNumberInputLayout.isErrorEnabled = true
+                addCVVMargin()
                 cvvNRHintTV.setTextColor(resources.getColor(R.color.error_red))
                 if (isCardValid && foundCard.name== "AMEX"){
                     cvcNumberInputLayout.error = getString(R.string.cvv4NotValid)
@@ -230,6 +245,7 @@ internal class CardFormScreen():DialogFragment() {
 
             } else {
                 cvcNumberInputLayout.isErrorEnabled = false
+                removeCVVMargin()
                 cvvNRHintTV.setTextColor(colorCodeHint)
             }
 
@@ -352,14 +368,24 @@ internal class CardFormScreen():DialogFragment() {
         }
         customizeForm()
         setupUserFontResource()
+        //addCVVMargin()
         return formView
     }
 
 
+    fun addCVVMargin() {
+        val params = secureCodeHintIM.layoutParams as ViewGroup.MarginLayoutParams
+        params.rightMargin = 95
+    }
+
+    fun removeCVVMargin() {
+        val params = secureCodeHintIM.layoutParams as ViewGroup.MarginLayoutParams
+        params.rightMargin = 0
+    }
 
     fun validateCardNumber(cardNr: String){
         val currentCardNr = cardNr
-        if (currentCardNr.length >= 15) {
+        if (currentCardNr.length >= 13) {
             cardNumberInputLayout.isErrorEnabled = false
             cardNRHintTV.setTextColor(colorCodeHint)
             isCardValid = VerifoneCardValidator.validateCardNumber(currentCardNr)
@@ -376,6 +402,7 @@ internal class CardFormScreen():DialogFragment() {
                 if (foundCard.name=="AMEX"){
 
                     secureCodeHintIM.setImageResource(R.drawable.secure_hint_amex)
+
                 } else {
                     secureCodeHintIM.setImageResource(R.drawable.secure_hint_other)
                 }
@@ -399,7 +426,7 @@ internal class CardFormScreen():DialogFragment() {
                     }
                     "DISCOVER" -> {
                         discoverCardTypeIM.setImageResource(R.drawable.sv_discover_logo)
-                        discoverCardTypeIM.visibility = VISIBLE
+                        jcbCardTypeIM.visibility = VISIBLE
                     }
                     "JCB" -> {
                         jcbCardTypeIM.setImageResource(R.drawable.jcb_card_logo)
@@ -414,15 +441,22 @@ internal class CardFormScreen():DialogFragment() {
                 if (showFieldErrors) {
                     cardNRHintTV.setTextColor(resources.getColor(R.color.error_red))
                     cardNumberInputLayout.isErrorEnabled = true
-                    cardNumberInputLayout.error = getString(R.string.identityCardNumberNotValid)
+                    cardNumberInputLayout.error = getString(R.string.nrNotValid)
                 }
                 visaCardTypeIM.visibility = GONE
             }
         } else {
+            visaCardTypeIM.visibility = INVISIBLE
+            mastercardTypeIM.visibility = INVISIBLE
+            amexCardTypeIM.visibility = INVISIBLE
+            maestroCardTypeIM.visibility = INVISIBLE
+            jcbCardTypeIM.visibility = INVISIBLE
+            jcbCardTypeIM.visibility = INVISIBLE
+            dinersCardTypeIM.visibility = INVISIBLE
             if (showFieldErrors) {
                 cardNumberInputLayout.isErrorEnabled = true
                 cardNRHintTV.setTextColor(resources.getColor(R.color.error_red))
-                cardNumberInputLayout.error = getString(R.string.identityCardNumberLengthNotValid)
+                cardNumberInputLayout.error = getString(R.string.lengthNotValid)
             }
             visaCardTypeIM.visibility = GONE
             isCardValid = false
@@ -446,7 +480,6 @@ internal class CardFormScreen():DialogFragment() {
         if (isFormatValid) {
             expiryDateInputLayout.isErrorEnabled = false
             expiryDateHintTV.setTextColor(colorCodeHint)
-
 
         } else {
             expiryDateInputLayout.isErrorEnabled = true
@@ -562,9 +595,11 @@ internal class CardFormScreen():DialogFragment() {
             if (!showFieldErrors) return
             if (cvcString.length == secureCodeLength) {
                 cvcNumberInputLayout.isErrorEnabled = false
+                removeCVVMargin()
                 cvvNRHintTV.setTextColor(colorCodeHint)
             } else {
                 cvvNRHintTV.setTextColor(resources.getColor(R.color.error_red))
+                addCVVMargin()
                 cvcNumberInputLayout.isErrorEnabled = true
                 if ( foundCard.name == "AMEX")
                     cvcNumberInputLayout.error = getString(R.string.cvv4NotValid)
@@ -582,7 +617,6 @@ internal class CardFormScreen():DialogFragment() {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setStyle(STYLE_NO_FRAME, android.R.style.Theme)
-
     }
 
     override fun onStart() {
@@ -591,6 +625,7 @@ internal class CardFormScreen():DialogFragment() {
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
         )
+        if(callbackKeeper == null) dismiss()
     }
 
     private fun customizeForm() {
@@ -625,13 +660,12 @@ internal class CardFormScreen():DialogFragment() {
 
         try {
             colorCodeHint = Color.parseColor(customizationData.hintTextColor)
-            expiryDateInputLayout.defaultHintTextColor = ColorStateList.valueOf(colorCodeHint)
-            cardNumberInputLayout.defaultHintTextColor = ColorStateList.valueOf(colorCodeHint)
-            ownerNameInputLayout.defaultHintTextColor = ColorStateList.valueOf(colorCodeHint)
-            cvcNumberInputLayout.defaultHintTextColor = ColorStateList.valueOf(colorCodeHint)
+            expiryDateHintTV.setTextColor(ColorStateList.valueOf(colorCodeHint))
+            cardNRHintTV.setTextColor( ColorStateList.valueOf(colorCodeHint))
+            buyerNameHintTV.setTextColor(ColorStateList.valueOf(colorCodeHint))
+            cvvNRHintTV.setTextColor( ColorStateList.valueOf(colorCodeHint))
             showRecurrentTV.setTextColor(colorCodeHint)
         } catch (e: java.lang.Exception){
-
         }
 
         try {
@@ -687,7 +721,6 @@ internal class CardFormScreen():DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(VerifonePaymentForm.keyTextFontID,customizationData.userTextFontRes)
-        outState.putSerializable(VerifonePaymentForm.keyCallbackCardInputResult,CallbackActionKeeper(onCardInputDone))
         outState.putString(VerifonePaymentForm.keyFormBackground,customizationData.paymentFormBackground)
         outState.putString(VerifonePaymentForm.keyTextFieldBackground,customizationData.formTextFieldsBackground)
         outState.putString(VerifonePaymentForm.keyPayButtonColor,customizationData.payButtonColor)
@@ -697,19 +730,11 @@ internal class CardFormScreen():DialogFragment() {
         outState.putString(VerifonePaymentForm.keyDisplayPrice,price)
         outState.putString(VerifonePaymentForm.keyMerchantPublicKey,publicKey)
         outState.putBoolean(VerifonePaymentForm.keyShowRecurrentPaymentsOption,showRecurrentOption)
-        //outState.putString(keyCardEditInput,cardNumberInput.text.toString())
-        //outState.putString(keyCVCEditInput,cvcNumberInput.text.toString())
-        //outState.putString(keyExpiryEditInput,expiryDateEdit.text.toString())
-        //outState.putString(keyCardEditInput,ownerNameInput.text.toString())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         val temp = savedInstanceState?.getInt(VerifonePaymentForm.keyTextFontID)?:-1
-        val container  = savedInstanceState?.getSerializable(VerifonePaymentForm.keyCallbackCardInputResult) as CallbackActionKeeper?
-        if (container != null) {
-            onCardInputDone = container.onCardInput as (CreditCardInputResult) -> Unit
-        }
         if (temp>0) customizationData.userTextFontRes = temp
 
         var tempValue = savedInstanceState?.getString(VerifonePaymentForm.keyFormBackground,"")?:""

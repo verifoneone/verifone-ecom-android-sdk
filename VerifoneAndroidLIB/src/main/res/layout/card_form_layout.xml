@@ -13,17 +13,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent=".78"
+        android:paddingBottom="14dp"
         android:layout_width="0dp"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/logo_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pay_button"
             app:layout_constraintHeight_percent=".048"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="0dp">
             <androidx.appcompat.widget.AppCompatImageView
@@ -41,6 +42,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/logo_text"
                 android:textSize="14sp"
+                android:textColor="@color/light_grey"
                 android:gravity="center_vertical"
                 app:layout_constraintEnd_toStartOf="@id/verifone_logo"
                 app:layout_constraintTop_toTopOf="parent"
@@ -94,7 +96,7 @@
             android:layout_height="1.5dp"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_number_hint_tv"
-            android:text="@string/cardNumberPlaceholder"
+            android:text="@string/cardNumberLabel"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@id/card_number_input_layout"
@@ -151,7 +153,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintWidth_percent=".16"
-                app:layout_constraintHeight_percent=".28"
+                app:layout_constraintHeight_percent=".39"
                 android:layout_width="0dp"
                 android:layout_height="0dp"/>
             <androidx.appcompat.widget.AppCompatImageView
@@ -174,7 +176,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintWidth_percent=".13"
-                app:layout_constraintHeight_percent=".59"
+                app:layout_constraintHeight_percent=".77"
                 android:layout_width="0dp"
                 android:layout_height="0dp"/>
             <androidx.appcompat.widget.AppCompatImageView
@@ -293,7 +295,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cvc_input_layout"
                 android:layout_width="0dp"
-                app:layout_constraintWidth_percent=".43"
+                app:layout_constraintWidth_percent=".47"
                 android:layout_height="wrap_content"
 
                 app:hintEnabled="false"
@@ -321,14 +323,15 @@
                     android:textSize="16sp"
                     android:paddingStart="@dimen/card_input_padding"
                     android:textColor="@android:color/black"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cvc_input_dummy"
                 android:layout_width="0dp"
-                app:layout_constraintWidth_percent=".36"
+                app:layout_constraintWidth_percent=".45"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="2dp"
+                app:hintEnabled="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -343,7 +346,7 @@
                 android:theme="@style/EditTextThemeOverlay"
                 app:layout_constraintStart_toStartOf="@id/cvc_input_layout"
 
-                app:layout_constraintTop_toTopOf="@id/cvc_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/cvc_hint_tv"
                >
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cvc_nr_dummy"
@@ -354,23 +357,21 @@
                     android:maxLength="4"
                     android:text="Dumm"
                     android:inputType="number"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:paddingStart="0dp"
                     android:textColor="@android:color/transparent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/secure_code_hint_im"
                 app:layout_constraintEnd_toEndOf="@id/cvc_input_dummy"
                 android:src="@drawable/secure_hint_other"
-                app:layout_constraintHeight_percent=".68"
+                android:scaleType="fitXY"
                 app:layout_constraintTop_toTopOf="@id/cvc_input_dummy"
                 app:layout_constraintBottom_toBottomOf="@id/cvc_input_dummy"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintWidth_percent=".16"
-                android:layout_width="0dp"
-                android:layout_height="0dp"/>
+                android:layout_width="@dimen/cvv_logo_width"
+                android:layout_height="@dimen/cvv_logo_height"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -449,7 +450,7 @@
             android:background="@drawable/pay_button_shape"
             android:text="@string/submitPay"
             android:textSize="15sp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:textColor="@android:color/white"
             app:layout_constraintHeight_percent=".1"
             app:layout_constraintWidth_percent=".86"

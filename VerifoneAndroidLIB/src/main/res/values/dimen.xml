@@ -7,4 +7,6 @@
     <dimen name="option_arrow_size">14dp</dimen>
     <dimen name="pay_options_padding">5dp</dimen>
     <dimen name="card_input_padding">16dp</dimen>
+    <dimen name="cvv_logo_height">30dp</dimen>
+    <dimen name="cvv_logo_width">48dp</dimen>
 </resources>

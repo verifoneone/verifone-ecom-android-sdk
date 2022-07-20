@@ -55,7 +55,7 @@
    <string name="returnToMerchantInfoText">If you are not automatically redirected to merchant page in 10sec, please click on \'Continue back to store\'</string>
    <string name="paymentSelectTitle">Select payment method</string>
 
-   <string name="paymentProductTitleCard">Credit card</string>
+   <string name="paymentProductTitleCard">Credit Card</string>
    <string name="paymentProductTitlePaypal">PayPal</string>
    <string name="paymentProductTitleGooglePay">Google Pay</string>
    <string name="paymentProductTitleKlarna">Klarna</string>
