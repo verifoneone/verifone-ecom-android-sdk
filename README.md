@@ -160,3 +160,27 @@ If the customer selected Google Pay, you can initialize Google Pay using the `Ve
     }
 ```
 
+
+##### Customize the card form
+
+Configure default theme properties for a credit card form.
+
+```kotlin
+val customization = FormUICustomizationData()
+customization.formInputTextColor = "#F08080"
+```
+
+List of properties for customizing the credit card form.
+
+N | PROPERTY NAME | DESCRIPTION 
+| --- | --- | --- |  
+1 | formBackground | Card form view background color |
+2 | textFieldBackground | Background color for any text fields in a card form |
+3 | inputTextColor | Text color for any text fields in a card form |
+4 | hintColor | Text color for any hints in a card form |
+5 | titleTextColor | Text color for any titles in a card form |
+6 | buttonColor | button background color |
+7 | payButtonDisabledBackgroundColor | Pay button background color for disabled state |
+8 | textFont | Typeface |
+9 | textFontID | Int |
+
