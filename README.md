@@ -66,7 +66,12 @@ val paymentOptionsSheet = VerifonePaymentOptions(this,payOptionsList,::onPayMeth
 paymentOptionsSheet.showPaymentOptionList()
 ```
 
-###### Transaction flow without 3DS.
+###### Encrypt a card without using the UI componet
+```kotlin
+val card = VerifonePaymentForm.encryptCardData(12,2025,"4111111111111111","123","YOUR_PUBLIC_KEY")
+```
+
+###### Transaction flow with the UI componet.
 
 A simple implementation for each payment method is provided below.
 
