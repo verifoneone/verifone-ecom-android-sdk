@@ -10,8 +10,6 @@ class ThreedsValidationData(eciFlag: String?, enrolledParam: String?, cavvParam:
 
     }
 
-    var validationStatus:String = ""
-
     var failReason = ""
 
     @SerializedName("eci_flag")

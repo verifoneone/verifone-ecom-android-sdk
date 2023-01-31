@@ -39,13 +39,25 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         const val keyPaymentsApiUserName = "api_payments_api_user_name"
         const val keyPaymentsApiKey = "api_payments_api_key"
         const val keyPaymentsTokenScope = "payments_token_scope"
+        const val keyCardEncryptionKey = "card_encryption_key"
 
         const val keyGooglePayInputGatewayMerchantID = "google_pay_input_gateway_merchant_id"
         const val keyGooglePayInputMerchantName = "google_pay_input_merchant_name"
         const val keyGooglePayInputMerchantID = "google_pay_input_merchant_id"
 
+        const val keySwishPPC = "SwishPPC"
+        const val keySwishEntityId = "SwishEntityId"
 
-        const val keyCardEncryptionKey = "card_encryption_key"
+        const val keyKlarnaCustomerID = "klarnaCustomerID"
+        const val keyKlarnaOrdID = "klarnaOrgID"
+
+        const val keyMobilepayProviderContract = "mobilepayPPC"
+        const val keyMobilepayCustomerID = "mobilepayCustomerID"
+        const val keyMobilepayOrgID = "mobilepayOrgID"
+
+        const val keyVippsProviderContract = "vippsPPC"
+        const val keyVippsCustomerID = "vippsCustomerID"
+
 
         fun getStoredLanguage(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
@@ -124,6 +136,53 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             return sharedPref.getString(keyCardEncryptionKey,"")?:""
         }
 
+        fun getSwishPPC(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keySwishPPC,"")?:""
+        }
+
+        fun getSwishEntityID(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keySwishEntityId,"")?:""
+        }
+
+
+        fun getKlarnaOrgID(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyKlarnaOrdID,"")?:""
+        }
+
+        fun getKlarnaCustomerID(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyKlarnaCustomerID,"")?:""
+        }
+
+
+        fun getMobilepayOrgID(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyMobilepayOrgID,"")?:""
+        }
+
+        fun getMobilepayCustomer(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyMobilepayCustomerID,"")?:""
+        }
+        fun getMobilepayContract(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyMobilepayProviderContract,"")?:""
+        }
+
+
+
+        fun getVippsCustomer(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyVippsCustomerID,"")?:""
+        }
+        fun getVippsContract(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyVippsProviderContract,"")?:""
+        }
+
     }
 
     var languageSelection:String=""
@@ -154,6 +213,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     lateinit var showCardCheck:CheckBox
     lateinit var showPaypalCheck:CheckBox
     lateinit var showGooglePayCheck:CheckBox
+    lateinit var showKlarnaCheck:CheckBox
+    lateinit var showSwishCheck:CheckBox
+    lateinit var showMobilePayCheck:CheckBox
+    lateinit var showVippsCheck:CheckBox
     private val enableThreedsCheck by lazy { findViewById<CheckBox>(R.id.checkbox_option_3ds) }
 
     private val jwtKeyAliasInput by lazy { findViewById<TextInputEditText>(R.id.jwt_key_alias_edit) }
@@ -172,6 +235,19 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     private val edGooglePayInputMerchantName by lazy { findViewById<TextInputEditText>(R.id.google_pay_input_merchant_name_edit) }
     private val edGooglePayInputMerchantID by lazy { findViewById<TextInputEditText>(R.id.google_pay_input_merchant_id_edit) }
 
+    private val edSwishPaymentsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_swish_payment_provider_contract_edit) }
+    private val edSwishPaymentsEntityID by lazy { findViewById<TextInputEditText>(R.id.request_swish_payment_entity_id_edit) }
+
+
+    private val edKlarnaOrgID by lazy { findViewById<TextInputEditText>(R.id.request_klarna_org_id_edit) }
+    private val edKlarnaCustomer by lazy { findViewById<TextInputEditText>(R.id.request_klarna_customer_id_edit) }
+
+    private val edMobilePayOrgID by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_org_id_edit) }
+    private val edMobilePayCustomer by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_customer_edit) }
+    private val edMobilePayProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_provider_contract_edit) }
+
+    private val edVippsCustomer by lazy { findViewById<TextInputEditText>(R.id.request_vipps_customer_edit) }
+    private val edVippsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_vipps_payment_provider_contract_edit) }
 
     lateinit var showSetupLanguageTV:AppCompatTextView
     var currentLanguage = "EN"
@@ -287,6 +363,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         showCardCheck = findViewById(R.id.checkbox_option_card)
         showPaypalCheck = findViewById(R.id.checkbox_option_paypal)
         showGooglePayCheck = findViewById(R.id.checkbox_option_google_pay)
+        showKlarnaCheck = findViewById(R.id.checkbox_option_klarna)
+        showMobilePayCheck = findViewById(R.id.checkbox_option_mobile_pay)
+        showSwishCheck = findViewById(R.id.checkbox_option_swish)
+        showVippsCheck = findViewById(R.id.checkbox_option_vipps)
 
         changeLangButton.setOnClickListener {
             gotoLangSelectionScreen()
@@ -321,6 +401,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             saveShowCard(showCardCheck.isChecked)
             saveShowPaypal(showPaypalCheck.isChecked)
             saveShowGooglePay(showGooglePayCheck.isChecked)
+            saveShowKlarna(showKlarnaCheck.isChecked)
+            saveShowSwish(showSwishCheck.isChecked)
+            saveShowVipps(showVippsCheck.isChecked)
+            saveShowMobilePay(showMobilePayCheck.isChecked)
             savePaymentSettingsData()
             finish()
         }
@@ -369,6 +453,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         showCardCheck.isChecked = getShowCard()
         showPaypalCheck.isChecked = getShowPaypal()
         showGooglePayCheck.isChecked = getShowGooglePay()
+        showKlarnaCheck.isChecked = getShowKlarna()
+        showMobilePayCheck.isChecked = getShowMobilePay()
+        showSwishCheck.isChecked = getShowSwish()
+        showVippsCheck.isChecked = getShowVipps()
     }
 
     private fun loadPaymentData() {
@@ -385,6 +473,20 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         edGooglePayInputGatewayMerchantID.setText(getGooglePayInputGatewayMerchantID(this))
         edGooglePayInputMerchantName.setText(getGooglePayInputMerchantName(this))
         edGooglePayInputMerchantID.setText(getGooglePayInputMerchantID(this))
+
+        edSwishPaymentsProviderContract.setText(getSwishPPC(this))
+        edSwishPaymentsEntityID.setText(getSwishEntityID(this))
+
+        edKlarnaOrgID.setText(getKlarnaOrgID(this))
+        edKlarnaCustomer.setText(getKlarnaCustomerID(this))
+
+        edMobilePayCustomer.setText(getMobilepayCustomer(this))
+        edMobilePayOrgID.setText(getMobilepayOrgID(this))
+        edMobilePayProviderContract.setText(getMobilepayContract(this))
+
+        edVippsCustomer.setText(getVippsCustomer(this))
+
+        edVippsProviderContract.setText(getVippsContract(this))
 
     }
 
@@ -472,6 +574,53 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
         return sharedPref.getBoolean("key_store_show_google_pay",true)
     }
+    private fun saveShowKlarna(showKlarna:Boolean) {
+        val sp = getSharedPreferences("checkout_data",Context.MODE_PRIVATE)
+        sp.edit()
+            .putBoolean("key_store_show_klarna",showKlarna)
+            .apply()
+    }
+
+    private fun saveShowSwish(showKlarna:Boolean) {
+        val sp = getSharedPreferences("checkout_data",Context.MODE_PRIVATE)
+        sp.edit()
+            .putBoolean("key_store_show_swish",showKlarna)
+            .apply()
+    }
+
+    private fun saveShowVipps(showVipps:Boolean) {
+        val sp = getSharedPreferences("checkout_data",Context.MODE_PRIVATE)
+        sp.edit()
+            .putBoolean("key_store_show_vipps",showVipps)
+            .apply()
+    }
+
+    private fun saveShowMobilePay(showMobilePay:Boolean) {
+        val sp = getSharedPreferences("checkout_data",Context.MODE_PRIVATE)
+        sp.edit()
+            .putBoolean("key_store_show_mobile_pay",showMobilePay)
+            .apply()
+    }
+
+    private fun getShowKlarna():Boolean {
+        val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("key_store_show_klarna",true)
+    }
+
+    private fun getShowMobilePay():Boolean {
+        val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("key_store_show_mobile_pay",true)
+    }
+
+    private fun getShowSwish():Boolean {
+        val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("key_store_show_swish",true)
+    }
+
+    private fun getShowVipps():Boolean {
+        val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("key_store_show_vipps",true)
+    }
 
     private fun getStoredFontPos():Int {
         val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
@@ -498,6 +647,16 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             .putString(keyGooglePayInputMerchantName,edGooglePayInputMerchantName.text.toString())
             .putString(keyGooglePayInputMerchantID,edGooglePayInputMerchantID.text.toString())
             .putString(keyCardEncryptionKey,cardEncryptionKeyEd.text.toString())
+            .putString(keySwishPPC,edSwishPaymentsProviderContract.text.toString())
+            .putString(keySwishEntityId,edSwishPaymentsEntityID.text.toString())
+            .putString(keyKlarnaCustomerID,edKlarnaCustomer.text.toString())
+            .putString(keyKlarnaOrdID,edKlarnaOrgID.text.toString())
+            .putString(keyMobilepayProviderContract,edMobilePayProviderContract.text.toString())
+            .putString(keyMobilepayOrgID,edMobilePayOrgID.text.toString())
+            .putString(keyMobilepayCustomerID,edMobilePayCustomer.text.toString())
+            .putString(keyVippsProviderContract,edVippsProviderContract.text.toString())
+
+            .putString(keyVippsCustomerID,edVippsCustomer.text.toString())
             .apply()
     }
 

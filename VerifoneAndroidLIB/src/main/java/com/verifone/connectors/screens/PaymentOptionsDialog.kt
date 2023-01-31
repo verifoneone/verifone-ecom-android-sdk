@@ -18,6 +18,10 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
     private lateinit var mCardOptionBtn:ConstraintLayout
     private lateinit var mPaypalOptionBtn:ConstraintLayout
     private lateinit var mGooglePayOptionBtn:ConstraintLayout
+    private lateinit var mKlarnaPayOptionBtn:ConstraintLayout
+    private lateinit var mSwishPayOptionBtn:ConstraintLayout
+    private lateinit var mMobilePayOptionBtn:ConstraintLayout
+    private lateinit var mVippsOptionBtn:ConstraintLayout
     private lateinit var mCloseBtn:AppCompatImageView
     //var startCardFlow = startCardFlowParam
     //var startPayPalFlow = startPayPalFlowParam
@@ -36,12 +40,24 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
         paymentOptionButtons.add(findViewById(R.id.pay_option_container1))
         paymentOptionButtons.add(findViewById(R.id.pay_option_container2))
         paymentOptionButtons.add(findViewById(R.id.pay_option_container3))
+        paymentOptionButtons.add(findViewById(R.id.pay_option_container4))
+        paymentOptionButtons.add(findViewById(R.id.pay_option_container5))
+        paymentOptionButtons.add(findViewById(R.id.pay_option_container6))
+        paymentOptionButtons.add(findViewById(R.id.pay_option_container7))
         paymentOptionImages.add(findViewById(R.id.pay_option_image1))
         paymentOptionImages.add(findViewById(R.id.pay_option_image2))
         paymentOptionImages.add(findViewById(R.id.pay_option_image3))
+        paymentOptionImages.add(findViewById(R.id.pay_option_image4))
+        paymentOptionImages.add(findViewById(R.id.pay_option_image5))
+        paymentOptionImages.add(findViewById(R.id.pay_option_image6))
+        paymentOptionImages.add(findViewById(R.id.pay_option_image7))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text1))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text2))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text3))
+        paymentOptionTexts.add(findViewById(R.id.pay_option_text4))
+        paymentOptionTexts.add(findViewById(R.id.pay_option_text5))
+        paymentOptionTexts.add(findViewById(R.id.pay_option_text6))
+        paymentOptionTexts.add(findViewById(R.id.pay_option_text7))
 
         mCloseBtn = findViewById(R.id.close_btn)
         mCloseBtn.setOnClickListener {
@@ -52,6 +68,7 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
 
     }
     private fun setupSelectedPayOptions(displayOptions: ArrayList<String>) {
+
         for ((i, index) in displayOptions.withIndex()) {
             if (index == VerifonePaymentOptions.paymentOptionCard) {
                 mCardOptionBtn = paymentOptionButtons[i]
@@ -84,6 +101,42 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
                 paymentOptionTexts[i].setText(R.string.paymentProductTitleGooglePay)
                 paymentOptionImages[i].setImageResource(R.drawable.sv_google_pay_logo)
                 //paymentOptionImages[i].backgroundTintList = ColorStateList()
+            } else if (index == VerifonePaymentOptions.paymentOptionKlarna) {
+                mKlarnaPayOptionBtn = paymentOptionButtons[i]
+                mKlarnaPayOptionBtn.visibility = View.VISIBLE
+                mKlarnaPayOptionBtn.setOnClickListener {
+                    payMethodSelected(VerifonePaymentOptions.paymentOptionKlarna)
+                    dismiss()
+                }
+                paymentOptionTexts[i].setText(R.string.paymentProductTitleKlarna)
+                paymentOptionImages[i].setImageResource(R.drawable.sv_klarna_logo)
+            } else if (index == VerifonePaymentOptions.paymentOptionSwish) {
+                mSwishPayOptionBtn = paymentOptionButtons[i]
+                mSwishPayOptionBtn.visibility = View.VISIBLE
+                mSwishPayOptionBtn.setOnClickListener {
+                    payMethodSelected(VerifonePaymentOptions.paymentOptionSwish)
+                    dismiss()
+                }
+                paymentOptionTexts[i].setText(R.string.paymentProductTitleSwish)
+                paymentOptionImages[i].setImageResource(R.drawable.swish_logo)
+            } else if (index == VerifonePaymentOptions.paymentOptionMobilePay){
+                mMobilePayOptionBtn = paymentOptionButtons[i]
+                mMobilePayOptionBtn.visibility = View.VISIBLE
+                mMobilePayOptionBtn.setOnClickListener {
+                    payMethodSelected(VerifonePaymentOptions.paymentOptionMobilePay)
+                    dismiss()
+                }
+                paymentOptionTexts[i].setText(R.string.paymentProductTitleMobilePay)
+                paymentOptionImages[i].setImageResource(R.drawable.mobile_pay_logo)
+            } else if (index == VerifonePaymentOptions.paymentOptionVipps){
+                mVippsOptionBtn = paymentOptionButtons[i]
+                mVippsOptionBtn.visibility = View.VISIBLE
+                mVippsOptionBtn.setOnClickListener {
+                    payMethodSelected(VerifonePaymentOptions.paymentOptionVipps)
+                    dismiss()
+                }
+                paymentOptionTexts[i].setText(R.string.paymentProductTitleVipps)
+                paymentOptionImages[i].setImageResource(R.drawable.sv_vipps_logo)
             }
         }
     }

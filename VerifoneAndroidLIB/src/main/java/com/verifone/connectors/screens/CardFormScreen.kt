@@ -82,13 +82,12 @@ internal class CardFormScreen():DialogFragment() {
     private lateinit var cardNumberInputLayout:TextInputLayout
     lateinit var expiryDateInputLayout:TextInputLayout
     lateinit var cvcNumberInputLayout:TextInputLayout
-    lateinit var ownerNameInputLayout:TextInputLayout
+
     lateinit var expiryDateEdit:AppCompatEditText
     lateinit var cardNumberInput:TextInputEditText
     lateinit var cvcNumberInput:TextInputEditText
     lateinit var secureCodeHintIM:AppCompatImageView
     var secureCodeLength = 3
-    lateinit var ownerNameInput:TextInputEditText
     lateinit var separatorView:View
     lateinit var closeBtn:AppCompatImageView
     var foundCard:VerifoneCardValidator.Cards = VerifoneCardValidator.Cards.NOCARD
@@ -110,14 +109,13 @@ internal class CardFormScreen():DialogFragment() {
     private var price = "0"
     private val yearConst = 2000
     var isCardValid = false
-    var isNameValid = false
     private lateinit var mCtx:Context
     var selectedYear:Int = 0
     var selectedMonth:Int = 0
     private var showRecurrentOption:Boolean = false
-    private var customizationData = FormUICustomizationData() //= customizationParam
+    private var customizationData = FormUICustomizationData()
 
-    private lateinit var onCardInputDone: (inputResult:CreditCardInputResult) -> Unit //= onCardInputComplete
+    private lateinit var onCardInputDone: (inputResult:CreditCardInputResult) -> Unit
     lateinit var payButton:AppCompatButton
     lateinit var cardFormView:View
     var isExpiryDateInputValid:Boolean = false
@@ -133,19 +131,19 @@ internal class CardFormScreen():DialogFragment() {
         cardNRHintTV = formView.findViewById(R.id.card_number_hint_tv)
         expiryDateHintTV = formView.findViewById(R.id.expiry_hint_tv)
         cvvNRHintTV = formView.findViewById(R.id.cvc_hint_tv)
-        buyerNameHintTV = formView.findViewById(R.id.payer_name_hint_tv)
+
 
         cardNumberInputLayout = formView.findViewById(R.id.card_number_input_layout)
         expiryDateInputLayout = formView.findViewById(R.id.card_expiry_input_layout)
         cvcNumberInputLayout = formView.findViewById(R.id.cvc_input_layout)
-        ownerNameInputLayout = formView.findViewById(R.id.payer_name_input_layout)
+
         textLogoTV = formView.findViewById(R.id.logo_text)
         expiryDateEdit = formView.findViewById(R.id.card_expiry_edit)
         payButton = formView.findViewById(R.id.pay_button)
         cardNumberInput = formView.findViewById(R.id.card_edit_text)
         secureCodeHintIM = formView.findViewById(R.id.secure_code_hint_im)
         cvcNumberInput = formView.findViewById(R.id.cvc_nr_edit)
-        ownerNameInput = formView.findViewById(R.id.payer_name_edit_text)
+
         showRecurrentTV = formView.findViewById(R.id.store_payment_details)
         showRecurrentSwitch = formView.findViewById(R.id.save_card_checkbox)
         separatorView = formView.findViewById(R.id.separator_top)
@@ -221,18 +219,6 @@ internal class CardFormScreen():DialogFragment() {
                 )
             }
 
-            val name = ownerNameInput.text.toString()
-            if (name.isNullOrEmpty()) {
-                isNameValid = false
-                ownerNameInputLayout.isErrorEnabled = true
-                buyerNameHintTV.setTextColor(resources.getColor(R.color.error_red))
-                ownerNameInputLayout.error = getString(R.string.customerText)
-            } else {
-                isNameValid = true
-                buyerNameHintTV.setTextColor(colorCodeHint)
-                ownerNameInputLayout.isErrorEnabled = false
-            }
-
             if (!cvcValid) {
                 cvcNumberInputLayout.isErrorEnabled = true
                 addCVVMargin()
@@ -249,7 +235,7 @@ internal class CardFormScreen():DialogFragment() {
                 cvvNRHintTV.setTextColor(colorCodeHint)
             }
 
-            if (creditCardValid && cvcValid && expiryValid && isExpiryDateInputValid && isNameValid) {
+            if (creditCardValid && cvcValid && expiryValid && isExpiryDateInputValid) {
 
                 val expMonth = selectedMonth
                 val expYear = selectedYear
@@ -274,7 +260,7 @@ internal class CardFormScreen():DialogFragment() {
 
                 val cardInputResultData = CreditCardInputResult()
                 cardInputResultData.encryptedCardData = encryptedCard
-                cardInputResultData.payerName = name
+                cardInputResultData.payerName = ""
                 cardInputResultData.cardProperties = cardData
                 cardInputResultData.storeCard = showRecurrentSwitch.isChecked
                 onCardInputDone(
@@ -316,48 +302,6 @@ internal class CardFormScreen():DialogFragment() {
 
             }
         })
-
-        ownerNameInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                if (p0.isNullOrEmpty() && showFieldErrors) {
-                    isNameValid = false
-                    ownerNameInputLayout.isErrorEnabled = true
-                    buyerNameHintTV.setTextColor(resources.getColor(R.color.error_red))
-                    ownerNameInputLayout.error = getString(R.string.customerText)
-                } else {
-                    isNameValid = true
-                    buyerNameHintTV.setTextColor(colorCodeHint)
-                    ownerNameInputLayout.isErrorEnabled = false
-                }
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, removed: Int, added: Int) {
-
-            }
-        })
-
-        ownerNameInput.setFilters(arrayOf<InputFilter>(object : InputFilter {
-            override fun filter(
-                source: CharSequence,
-                start: Int,
-                end: Int,
-                dest: Spanned,
-                dstart: Int,
-                dend: Int
-            ): CharSequence {
-                if(source == "") { // for backspace
-                    return source
-                }
-                if(source.toString().contains("[0-9]+".toRegex())) {
-                    return source.replace("[0-9]+".toRegex(),"")
-                }
-                return source
-            }
-        }))
 
         if (showRecurrentOption) {
             showRecurrentTV.visibility = VISIBLE
@@ -638,7 +582,6 @@ internal class CardFormScreen():DialogFragment() {
 
         try {
             colorCodeTextInputField = Color.parseColor(customizationData.formTextFieldsBackground)
-            ownerNameInputLayout.setBoxBackgroundColorStateList(ColorStateList.valueOf(colorCodeTextInputField))
             cardNumberInputLayout.setBoxBackgroundColorStateList(ColorStateList.valueOf(colorCodeTextInputField))
 
             cvcNumberInputLayout.setBoxBackgroundColorStateList(ColorStateList.valueOf(colorCodeTextInputField))
@@ -650,7 +593,6 @@ internal class CardFormScreen():DialogFragment() {
 
         try {
             colorCodeInputText = Color.parseColor(customizationData.formInputTextColor)
-            ownerNameInput.setTextColor(ColorStateList.valueOf(colorCodeInputText))
             cardNumberInput.setTextColor(ColorStateList.valueOf(colorCodeInputText))
             cvcNumberInput.setTextColor(ColorStateList.valueOf(colorCodeInputText))
             expiryDateEdit.setTextColor(ColorStateList.valueOf(colorCodeInputText))
@@ -704,9 +646,9 @@ internal class CardFormScreen():DialogFragment() {
             cvcNumberInputLayout.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             cvvNRHintTV.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             cvcNumberInput.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
-            ownerNameInputLayout.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
+
             buyerNameHintTV.typeface =ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
-            ownerNameInput.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
+
             showRecurrentTV.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             payButton.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
         }

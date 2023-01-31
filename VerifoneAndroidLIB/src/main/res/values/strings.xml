@@ -91,5 +91,8 @@
    <string name="paymentInProgress">Please do not close this page until the payment is finished.</string>
    <string name="brandNotFoundError">Your card is not supported for this payment, please try using another card</string>
    <string name="closeThePageText">Thank you for the information provided, you can safely close the page</string>
-    <string name="cancelButtonText">Return to store"</string>
+   <string name="cancelButtonText">Return to store"</string>
+
+   <string name="klarna_authorize_label" translatable="false">Authorize</string>
+   <string name="klarna_finalize_label" translatable="false">Finalize</string>
 </resources>

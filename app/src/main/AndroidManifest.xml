@@ -11,24 +11,29 @@
         android:theme="@style/AppTheme">
         <activity android:name=".CheckoutActivity"
             android:screenOrientation="sensor"
+            android:launchMode="singleTop"
+            android:exported="true"
             android:configChanges="orientation|screenSize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".screens.PaymentFlowDone"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="sensorPortrait"
             />
         <activity android:name=".screens.CustomizationSettings"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="sensorPortrait"
             />
         <activity android:name=".screens.LanguageSelection"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="sensorPortrait"
             android:excludeFromRecents="true"

@@ -1,6 +1,7 @@
 package com.verifone.mobile.controllers
 
 import android.content.Context
+import com.verifone.mobile.CheckoutActivity
 import com.verifone.mobile.TestRetrofitClientInstance
 import com.verifone.mobile.dataobjects.paypal.PayPalRequestObject
 import com.verifone.mobile.dataobjects.paypal.PurchasedItem
@@ -41,7 +42,7 @@ class PayPalSimulateController(ctx:Context,onPayPalSuccess: (response: PayPalRes
         val ppc = CustomizationSettings.getPaymentsProviderContractPaypal(mCtx)
         val dynamicDescriptor = "PayPal order DD123"
         val merchantReference = "DD123-reference"
-        requestObject = PayPalRequestObject(ppc,dynamicDescriptor,merchantReference,paramItems)
+        requestObject = PayPalRequestObject(CheckoutActivity.currencyTV,ppc,dynamicDescriptor,merchantReference,paramItems)
         val requestObs = inputApi.startPayPalRequest(requestObject)
         requestObs.subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())

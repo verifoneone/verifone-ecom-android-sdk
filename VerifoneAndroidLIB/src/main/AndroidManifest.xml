@@ -1,8 +1,71 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.verifone.connectors">
-
+    <queries>
+        <package android:name="se.bankgirot.swish.sandbox" />
+        <package android:name="se.bankgirot.swish" />
+    </queries>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <meta-data
         android:name="com.google.android.gms.wallet.api.enabled"
         android:value="true" />
+    <application>
+
+        <activity
+            android:name=".googlepay.GooglePayStarterScreen"
+            android:screenOrientation="sensorPortrait"
+            android:label=""
+            android:exported="false" />
+
+        <activity android:name=".vipps.VippsStarterScreen"
+            android:screenOrientation="sensorPortrait"
+            android:label=""
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="vippsmt://"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="vipps://"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".mobilepay.MobilePayScreen"
+            android:screenOrientation="sensorPortrait"
+            android:launchMode="singleTop"
+            android:label=""
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="vfconnectors"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".swish.SwishPaymentActivity"
+            android:screenOrientation="sensorPortrait"
+            android:launchMode="singleTop"
+            android:label=""
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sdkverifone"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".klarna.KlarnaAuthorizationScreen"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:screenOrientation="sensorPortrait"
+            />
+    </application>
 
 </manifest>

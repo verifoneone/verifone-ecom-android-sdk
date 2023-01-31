@@ -2,7 +2,7 @@ package com.verifone.mobile.dataobjects.paypal
 
 import com.google.gson.annotations.SerializedName
 
-class PayPalRequestObject(ppc:String,dynamicDescriptor:String,merchantReference:String,purchasedItems:ArrayList<PurchasedItem>) {
+class PayPalRequestObject(currencyParam:String,ppc:String,dynamicDescriptor:String,merchantReference:String,purchasedItems:ArrayList<PurchasedItem>) {
 
     @SerializedName("intent")
     val intentPayPal = "AUTHORIZE"
@@ -27,7 +27,7 @@ class PayPalRequestObject(ppc:String,dynamicDescriptor:String,merchantReference:
     var merchantReference = merchantReference
 
     @SerializedName("detailedAmount")
-    var detailedAmountData = DetailedAmount("EUR",500)
+    var detailedAmountData = DetailedAmount(currencyParam,500)
 
     @SerializedName("amount")
     var amountData = UnitValueData("",0)
@@ -35,7 +35,7 @@ class PayPalRequestObject(ppc:String,dynamicDescriptor:String,merchantReference:
 
     init {
         var totalSum = 0
-        var currencyCode = "EUR"
+        var currencyCode = currencyParam
         for (it in itemList) {
             val tempQuantity = it.itemQuantity.toInt()
             currencyCode = it.unitAmount.currencyCode

@@ -28,7 +28,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
     implementation group: 'org.bouncycastle', name: 'bcpg-jdk15on', version: '1.57'
-    implementation 'org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.5-4'
+    implementation 'org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2'
     ...
 }
 ```
@@ -82,6 +82,13 @@ If the customer selected PayPal, you will have to do a create transaction API ca
 If the customer selected Google Pay, you can initialize Google Pay using the `VerifoneGooglePay` helper. This helper provides a simple wrapper for you to define your configuration and trnsaction properties, present the native Google Pay UI and get the payment token. You can then use the payment token as the `wallet_payload` when making a wallet transaction API call.
 
 ```kotlin
+
+private val googlePayReceiver = createGooglePayReceiver()
+private val googlePayRequestCode = 7419
+private val vippsPayReceiver = createVippsPayReceiver()
+
+...
+
     private fun onPayMethodSelected(paymentMethod: String) {
         when (paymentMethod) {
 
@@ -105,7 +112,7 @@ If the customer selected Google Pay, you can initialize Google Pay using the `Ve
             }
 
             VerifonePaymentOptions.paymentOptionGooglePay -> {
-                mVerifoneGooglePay = VerifoneGooglePay(::showGooglePayButton, this, googlePayRequestCode, VerifoneGooglePay.testEnvironment)
+                mVerifoneGooglePay = VerifoneGooglePay(this, VerifoneGooglePay.testEnvironment)
                 mVerifoneGooglePay.showGooglePayIfPossible()
 
                 val googlePayConfig = GooglePayConfiguration()
@@ -119,7 +126,14 @@ If the customer selected Google Pay, you can initialize Google Pay using the `Ve
                 googlePayConfig.merchantName = "YOUR_GOOGLE_MERCHANT_NAME"
                 googlePayConfig.merchantID = "YOUR_GOOGLE_MERCHANT_ID"
 
-                mVerifoneGooglePay.requestPaymentGoogle(googlePayConfig)
+                mVerifoneGooglePay.requestPaymentGoogle(googlePayConfig, googlePayRequestCode, googlePayReceiver)
+            }
+
+            VerifonePaymentOptions.paymentOptionVipps -> {
+                // make ecommerce API call to initiate a vipps transaction and use the redirect URL to initiate the vipps authorization
+                // https://verifone.cloud/api-catalog/verifone-ecommerce-api#tag/Ecom-Payments/operation/vippsTransaction
+
+                VippsPaymentsManager.showVippsAuthorizeScreen(this, vippsPayReceiver, transactionResponse.redirectURL)
             }
         }
     }
@@ -139,29 +153,38 @@ If the customer selected Google Pay, you can initialize Google Pay using the `Ve
         }
     }
 
-    private fun showGooglePayButton(googlePayPossible:Boolean) {
-        // called to let you know if google pay is possible on this device
-        val isGooglePayPossible = googlePayPossible
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        when (requestCode) {
-            googlePayRequestCode -> {
-                when (resultCode) {
-                    RESULT_OK ->
-                        data?.let { intent ->
-                            var googlePayResult = mVerifoneGooglePay.parseGooglePayload(intent)
-                            // Pass google pay result as the wallet payload on a wallet transaction request
+    private fun createGooglePayReceiver():ActivityResultLauncher<Intent> {
+        val actResLauncher: ActivityResultLauncher<Intent> =
+            registerForActivityResult(StartActivityForResult()){
+                    result:ActivityResult->
+                if (result.resultCode == googlePayRequestCode ) {
+                    if (result.data!=null) {
+                        result.data?.let {
+                            mGooglePayload = VerifoneGooglePay.parseGooglePayload(it)
                         }
-
-                    RESULT_CANCELED -> {
-                        // Nothing to do here normally - the user simply cancelled without selecting a payment method.
+                    } else {
+                        Toast.makeText(this,"Google pay transaction failed",Toast.LENGTH_LONG).show()
                     }
                 }
             }
+        return actResLauncher
+    }
+
+
+    private fun createVippsPayReceiver():ActivityResultLauncher<Intent> {
+        val vippsContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                VippsPaymentsManager.vippsTransactionFlowDone -> {
+                    // fetch the transaction with the ecommerce API to validate the status
+                    //https://verifone.cloud/api-catalog/verifone-ecommerce-api#tag/Transaction/operation/readTransaction
+                }
+                VippsPaymentsManager.vippsTransactionNotStarted->{
+                    Toast.makeText(this,"transaction failed",Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data)
+        return vippsContract
     }
 ```
 

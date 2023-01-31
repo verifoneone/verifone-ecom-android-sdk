@@ -178,7 +178,6 @@
             android:paddingEnd="2dp"
             android:textColor="@color/form_text_black"
             android:maxLength="7"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -477,6 +476,35 @@
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_paypal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <CheckBox
+                android:id="@+id/checkbox_option_klarna"
+                app:layout_constraintStart_toStartOf="@id/fonts_spinner"
+                android:text="@string/paymentProductTitleKlarna"
+                app:layout_constraintTop_toBottomOf="@id/checkbox_option_google_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <CheckBox
+                android:id="@+id/checkbox_option_swish"
+                app:layout_constraintStart_toStartOf="@id/fonts_spinner"
+                android:text="@string/paymentProductTitleSwish"
+                app:layout_constraintTop_toBottomOf="@id/checkbox_option_klarna"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_option_mobile_pay"
+                app:layout_constraintStart_toStartOf="@id/fonts_spinner"
+                android:text="@string/paymentProductTitleMobilePay"
+                app:layout_constraintTop_toBottomOf="@id/checkbox_option_swish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <CheckBox
+                android:id="@+id/checkbox_option_vipps"
+                app:layout_constraintStart_toStartOf="@id/fonts_spinner"
+                android:text="@string/paymentProductTitleVipps"
+                app:layout_constraintTop_toBottomOf="@id/checkbox_option_mobile_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 app:layout_constraintTop_toBottomOf="@id/change_font_label"
@@ -526,6 +554,25 @@
             layout="@layout/paypal_input_data"
             />
 
+        <include
+            android:id="@+id/mobilepay_input_data_fields"
+            layout="@layout/mobilepay_input_data"
+            />
+
+        <include
+            android:id="@+id/swish_input_data_fields"
+            layout="@layout/swish_input_data"
+            />
+
+        <include
+            android:id="@+id/klarna_input_data_fields"
+            layout="@layout/klarna_input_data"
+            />
+
+        <include
+            android:id="@+id/vipps_input_data_fields"
+            layout="@layout/vipps_input_data"
+            />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_save_btn"
@@ -543,8 +590,8 @@
             app:layout_constraintEnd_toStartOf="@id/margin_end_guide"
             android:background="@drawable/button_shape"
             android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/vipps_input_data_fields"
             android:layout_marginBottom="20dp"
-            app:layout_constraintTop_toBottomOf="@id/paypal_input_data_fields"
             android:textColor="@android:color/white"
             android:text="@string/cancel_label"
             android:layout_width="wrap_content"

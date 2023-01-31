@@ -13,25 +13,31 @@ import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import com.cardinalcommerce.cardinalmobilesdk.services.CardinalInitService
 import com.cardinalcommerce.cardinalmobilesdk.services.CardinalValidateReceiver
 import com.cardinalcommerce.shared.userinterfaces.UiCustomization
+import com.verifone.connectors.threeds.dataobjects.EncodedThreedsData
 import com.verifone.connectors.threeds.dataobjects.ThreedsConfigurationData
-import com.verifone.connectors.threeds.dataobjects.ThreedsValidationData
 
 
 class Verifone3DSecureManager private constructor(
     configurationData: ThreedsConfigurationData,
     onInitComplete: (session: String) -> Unit,
-    onValidationComplete: (authData: ThreedsValidationData) -> Unit
+    onValidationComplete: (authData: EncodedThreedsData) -> Unit,
+    threedsEnvironment:Int
 ) {
 
     companion object {
+        const val environmentStaging = 0
+        const val environmentProduction = 1
         fun createInstance(configurationData: ThreedsConfigurationData,
                            onInitComplete: (session: String) -> Unit,
-                           onValidationComplete: (authData: ThreedsValidationData) -> Unit):Verifone3DSecureManager? {
+                           onValidationComplete: (authData: EncodedThreedsData) -> Unit,environmentParam:Int):Verifone3DSecureManager? {
+
+            if (environmentParam != environmentStaging && environmentParam != environmentProduction) return null
             try {
                 val m3DSInstance = Verifone3DSecureManager(
                     configurationData,
                     onInitComplete,
-                    onValidationComplete
+                    onValidationComplete,
+                    environmentParam
                 )
                 return m3DSInstance
             } catch (e:NoClassDefFoundError){
@@ -42,7 +48,7 @@ class Verifone3DSecureManager private constructor(
     }
 
     private var threedsInitComplete:(sessionID: String) -> Unit = onInitComplete
-    private var validationComplete:(authData: ThreedsValidationData) -> Unit = onValidationComplete
+    private var validationComplete:(authData: EncodedThreedsData) -> Unit = onValidationComplete
 
     private val cardinal = Cardinal.getInstance()
 
@@ -51,7 +57,14 @@ class Verifone3DSecureManager private constructor(
 
     init {
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
-        cardinalConfigurationParameters.environment = CardinalEnvironment.STAGING
+
+        if(threedsEnvironment==0) {
+            cardinalConfigurationParameters.environment = CardinalEnvironment.STAGING
+        }
+        else {
+            cardinalConfigurationParameters.environment = CardinalEnvironment.PRODUCTION
+        }
+
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
         val rTYPE = JSONArray()
@@ -72,31 +85,18 @@ class Verifone3DSecureManager private constructor(
     var initError:String =""
 
     fun continueTSValidation(transactionID:String, payload:String, ctx: Activity) {
+        val encodedData = EncodedThreedsData()
         cardinal.cca_continue(transactionID,payload,ctx,object: CardinalValidateReceiver {
+
             override fun onValidated(p0: Context?, p1: ValidateResponse?, p2: String?) {
                 if (p1?.actionCode?.name == "SUCCESS") {
-                    val cavv = p1?.payment?.extendedData?.cavv
-                    val enrolled = p1?.payment?.extendedData?.enrolled
-                    val eciFlag = p1?.payment?.extendedData?.eciFlag
-                    val paresStatus = p1?.payment?.extendedData?.paResStatus
-                    val sigVerification = p1?.payment?.extendedData?.signatureVerification
-                    val dsTransactionID = p1?.payment?.processorTransactionId
-                    val xid = p1?.payment?.extendedData?.xid
-                    val threedAuth = ThreedsValidationData(
-                        eciFlag,
-                        enrolled,
-                        cavv,
-                        paresStatus,
-                        sigVerification,
-                        dsTransactionID,
-                        xid
-                    )
-                    threedAuth.validationStatus = "success"
-                    //continueValidError = "Cardinal continue valid:\n\n "+"action"+p1?.actionCode+"\n\n Error Description:"+p1?.errorDescription+" isValid:${p1?.isValidated} errorCode:${p1?.errorNumber}"
-                    validationComplete(threedAuth)
+                    encodedData.validationStatus = "success"
+                    encodedData.encodedThreedsString = p2.toString()
+
+                    validationComplete(encodedData)
 
                 } else if (p1?.actionCode?.name == "CANCEL") {
-                    val threedAuthCancel = ThreedsValidationData()
+                    val threedAuthCancel = EncodedThreedsData()
                     threedAuthCancel.validationStatus = p1?.actionCode?.name.toString()
                     validationComplete(threedAuthCancel)
                 }
@@ -105,6 +105,7 @@ class Verifone3DSecureManager private constructor(
     }
 
     fun validateTS() {
+        val encodedData = EncodedThreedsData()
         cardinal.init(serverJwt, object: CardinalInitService {
             override fun onSetupCompleted(consumerSessionId: String) {
                 initError += "onSetupCompleteCall:$consumerSessionId\n"
@@ -114,7 +115,7 @@ class Verifone3DSecureManager private constructor(
             override fun onValidated(validateResponse: ValidateResponse, serverJwt: String?) {
                 initError += "onValidatedCall:${validateResponse}\n"
                 //eventReporting.onThreeDValidationFailed(initError)
-                val threedAuth = ThreedsValidationData(
+                /*val threedAuth = ThreedsValidationData(
                     "",
                     "",
                     "",
@@ -122,9 +123,9 @@ class Verifone3DSecureManager private constructor(
                     "",
                     "",
                     ""
-                )
-                threedAuth.validationStatus = "failed"
-                validationComplete(threedAuth)
+                )*/
+                encodedData.validationStatus = "failed"
+                validationComplete(encodedData)
                 mValidateResponse = validateResponse
             }
         })

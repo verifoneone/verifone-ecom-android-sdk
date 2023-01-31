@@ -149,11 +149,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/customer_value_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
             android:paddingTop="@dimen/padding_small"
             android:paddingBottom="@dimen/padding_small"
-            android:text="john doe"
+            app:layout_constraintStart_toEndOf="@id/customer_label_tv"
             android:textColor="@color/form_text_grey"
             android:textSize="@dimen/text_size_small"
             app:layout_constraintEnd_toStartOf="@id/transaction_data_guide_vertical2"

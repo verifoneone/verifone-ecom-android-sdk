@@ -5,6 +5,9 @@
     <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
     <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
 
+    <string name="klarna_cancel" translatable="false">Canceled klarna payment</string>
+    <string name="klarna_failed" translatable="false">Klarna payment failed</string>
+    <string name="invalid_currency_str" translatable="false">"Invalid Currency"</string>
 
     <string name="pay_flow_label" translatable="false">Payment</string>
     <string name="use_paypal_label" translatable="false">Use paypal</string>
@@ -17,6 +20,8 @@
     <string name="back_to_store" translatable="false">Continue back to store</string>
     <string name="company_message" translatable="false">Secure payments provided by Verifone</string>
     <string name="title_settings" translatable="false">Settings</string>
+    <string name="change_currency_str" translatable="false">Change\n currency</string>
+    <string name="change_currency_input" translatable="false">Input currency</string>
 
     <string name="settings_background_text" translatable="false">Form background color</string>
     <string name="settings_text_field_text" translatable="false">Text field background color</string>
@@ -47,6 +52,26 @@
     <string name="settings_card_payments_reuse_token_api_name" translatable="false">API user name for create reuse token request</string>
     <string name="settings_card_payments_reuse_token_api_key" translatable="false">API key for create reuse token request</string>
 
+    <string name="settings_swish_ppc" translatable="false">Swish ppc</string>
+    <string name="settings_swish_api_user" translatable="false">Swish api user</string>
+    <string name="settings_swish_api_key" translatable="false">Swish api key</string>
+    <string name="settings_swish_api_entity" translatable="false">Swish entity id</string>
+
+    <string name="settings_klarna_api_user" translatable="false">Klarna api user</string>
+    <string name="settings_klarna_api_key" translatable="false">Klarna api key</string>
+    <string name="settings_klarna_card_ppc" translatable="false">Klarna card ppc</string>
+    <string name="settings_klarna_customer_id" translatable="false">Klarna customer</string>
+    <string name="settings_klarna_org_id" translatable="false">Klarna org id</string>
+
+    <string name="settings_mobilepay_org" translatable="false">Mobile pay org id</string>
+    <string name="settings_mobilepay_contract" translatable="false">Mobile pay provider contract</string>
+    <string name="settings_mobilepay_customer" translatable="false">Mobile pay customer</string>
+
+    <string name="settings_vipps_org_id" translatable="false">Vipps org id</string>
+    <string name="settings_vipps_contract" translatable="false">Vipps provider contract</string>
+    <string name="settings_vipps_customer" translatable="false">Vipps customer</string>
+    <string name="vipps_message" translatable="false">Vipps not installed</string>
+
     <string name="settings_card_payments_with_reuse_token_api_userid" translatable="false">API user id for pay with reuse token</string>
     <string name="settings_card_payments_with_reuse_token_api_key" translatable="false">API key for pay with reuse token request</string>
 
@@ -73,6 +98,10 @@
 
     <string name="settings_card_payments_tab_tile" translatable="false">Card payments parameters</string>
     <string name="settings_paypal_tab_tile" translatable="false">Paypal parameters</string>
+    <string name="settings_vipps_tab_tile" translatable="false">Vipps parameters</string>
+    <string name="settings_swish_tab_tile" translatable="false">Swish parameters</string>
+    <string name="settings_mobilepay_tab_tile" translatable="false">Mobilepay parameters</string>
+    <string name="settings_klarna_tab_tile" translatable="false">Klarna parameters</string>
     <string name="settings_google_input_tab_tile" translatable="false">Google pay object parameters</string>
     <string name="settings_google_pay_tab_tile" translatable="false">Google pay request parameters</string>
 

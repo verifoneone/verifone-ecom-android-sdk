@@ -15,13 +15,13 @@ class PurchasedItem(paramItemName:String,paramItemQuantity:String,paramItemDescr
     var itemDescription = paramItemDescription
 
     @SerializedName("sku")
-    var itemSKU = paramItemSKU//"123"
+    var itemSKU = paramItemSKU
 
     @SerializedName("category")
     var itemCategory = paramItemCategory
 
     @SerializedName("unitAmount")
-    var unitAmount = price//UnitValueData()
+    var unitAmount = price
 
     @SerializedName("tax")
     var unitTax = UnitValueData(unitAmount.currencyCode,1000)

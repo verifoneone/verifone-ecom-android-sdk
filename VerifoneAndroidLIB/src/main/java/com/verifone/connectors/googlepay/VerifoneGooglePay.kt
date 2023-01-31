@@ -1,8 +1,10 @@
 package com.verifone.connectors.googlepay
 import android.app.Activity
+import android.content.Context
 
 import android.content.Intent
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.verifone.connectors.GooglePayUtils
@@ -10,28 +12,43 @@ import com.verifone.connectors.GooglePayUtils
 import org.json.JSONException
 import org.json.JSONObject
 
-class VerifoneGooglePay(onGooglePay: (googlePossible: Boolean) -> Unit, paramScreen: Activity,
-                        paymentDataRequestCode: Int, paymentEnvironment:Int) {
+class VerifoneGooglePay {
 
+    private var hasParentActivity:Boolean = false
 
-    companion object{
-        const val testEnvironment = 3
-        const val productionEnvironment = 1
+    constructor (ctx: Context, onGooglePay: (googlePossible: Boolean) -> Unit, paramScreen: Activity,
+                 paymentEnvironment:Int) {
+        hasParentActivity = true
+        paymentsClient= GooglePayUtils.createPaymentsClient(paramScreen,paymentEnvironment)
+        onGooglePayPossible = onGooglePay
+        mCtx = ctx
     }
 
-    private var paymentsClient:PaymentsClient = GooglePayUtils.createPaymentsClient(paramScreen,paymentEnvironment)
-    private var ownerScreen:Activity = paramScreen
+    constructor(ctx: Context,
+                paymentEnvironment:Int) {
+        mCtx= ctx
+        hasParentActivity = false
+    }
+    companion object {
+        const val testEnvironment = 3
+        const val productionEnvironment = 1
+        lateinit var onGooglePayConfirmation: (walletPayload:WalletPayloadObject,resultCode:Int) -> Unit
+        fun parseGooglePayload(walletPayload: Intent):WalletPayloadObject {
+            return GooglePayStarterScreen.parseGooglePayload(walletPayload)
+        }
+    }
 
-    private var onGooglePayPossible = onGooglePay
+    private lateinit var paymentsClient:PaymentsClient
+    private var mCtx:Context
+    private lateinit var onGooglePayPossible:(googlePayPossible: Boolean) -> Unit
     private lateinit var mGooglePayloadObject:WalletPayloadObject
-    private var ownerActivityRequestCode:Int = paymentDataRequestCode
-
 
     fun showGooglePayIfPossible() {
         val isReadyToPayJson = GooglePayUtils.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
         // OnCompleteListener to be triggered when the result of the call is known.
+        if (!hasParentActivity) return
         val task = paymentsClient.isReadyToPay(request)
 
         task.addOnCompleteListener { completedTask ->
@@ -40,56 +57,63 @@ class VerifoneGooglePay(onGooglePay: (googlePossible: Boolean) -> Unit, paramScr
                     onGooglePayPossible(it)
                 }
             } catch (exception: ApiException) {
-                // Process error
-                Log.w("isReadyToPay1 failed", exception)
-                Log.w("isReadyToPay1 message", exception.localizedMessage)
-                Log.w("isReadyToPay1 reason", exception.cause.toString())
-                Log.w("isReadyToPay1 mess", exception.message.toString())
+
             }
         }
     }
 
-    fun requestPaymentGoogle(configObject:GooglePayConfiguration) {
-
-        val paymentDataRequestJson = GooglePayUtils.getPaymentDataRequest(configObject)
-        if (paymentDataRequestJson == null) {
-            Log.e("RequestPayment", "Can't fetch or invalid payment data request")
-            return
-        }
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-
-        if (request != null) {
-            AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), ownerScreen,ownerActivityRequestCode)
-        }
+    private fun startGooglePayScreen(resultCode:Int, configObject:GooglePayConfiguration){
+        val googlePayStarter = Intent(mCtx,GooglePayStarterScreen::class.java)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyConfigObject,GooglePayUtils.getPaymentDataRequest(configObject).toString())
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyCheckGooglePayPossible,hasParentActivity)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyMerchantResultCode,resultCode)
+        mCtx.startActivity(googlePayStarter)
     }
 
-    fun requestPaymentGoogle(requestObject:JSONObject) {
-        val request = PaymentDataRequest.fromJson(requestObject.toString())
-
-        if (request != null) {
-            AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), ownerScreen,ownerActivityRequestCode)
-        }
+    private fun startGooglePayScreen(resultCode:Int, configObject:JSONObject){
+        val googlePayStarter = Intent(mCtx,GooglePayStarterScreen::class.java)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyConfigObject,configObject.toString())
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyCheckGooglePayPossible,hasParentActivity)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyMerchantResultCode,resultCode)
+        mCtx.startActivity(googlePayStarter)
     }
 
+    fun requestGooglePayment(googlePaySessionID:Int, configObject:GooglePayConfiguration, onGooglePayConfirmed: (walletPayload:WalletPayloadObject,sessionID:Int) -> Unit) {
+        onGooglePayConfirmation = onGooglePayConfirmed
+        startGooglePayScreen(googlePaySessionID,configObject)
+    }
 
+    fun requestGooglePayment(googlePaySessionID:Int, requestObject:JSONObject, onGooglePayConfirmed: (walletPayload:WalletPayloadObject,sessionID:Int) -> Unit) {
+        onGooglePayConfirmation = onGooglePayConfirmed
+        startGooglePayScreen(googlePaySessionID,requestObject)
+    }
 
-    fun parseGooglePayload(walletPayload: Intent):WalletPayloadObject {
+    fun requestGooglePayment(configObject: GooglePayConfiguration,resultCode:Int,googlePayResultLauncherParam: ActivityResultLauncher<Intent>){
+        val googlePayStarter = Intent(mCtx,GooglePayStarterScreen::class.java)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyConfigObject,GooglePayUtils.getPaymentDataRequest(configObject).toString())
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyCheckGooglePayPossible,hasParentActivity)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyHasResultLauncher,true)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyMerchantResultCode,resultCode)
+        googlePayResultLauncherParam.launch(googlePayStarter)
+    }
+
+    fun requestGooglePayment(configObject: JSONObject,resultCode:Int,googlePayResultLauncherParam: ActivityResultLauncher<Intent>){
+        val googlePayStarter = Intent(mCtx,GooglePayStarterScreen::class.java)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyConfigObject,configObject.toString())
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyHasResultLauncher,true)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyCheckGooglePayPossible,hasParentActivity)
+        googlePayStarter.putExtra(GooglePayStarterScreen.keyMerchantResultCode,resultCode)
+        googlePayResultLauncherParam.launch(googlePayStarter)
+    }
+
+    private fun getGooglePayload(walletPayload: Intent):WalletPayloadObject {
         PaymentData.getFromIntent(walletPayload)?.let {
                 response->handleGooglePayload(response)
         }
         return mGooglePayloadObject
     }
 
-    /**
-     * PaymentData response object contains the payment information, as well as any additional
-     * requested information, such as billing and shipping address.
-     *
-     * @param paymentData A response object returned by Google after a payer approves payment.
-     * @see [Payment
-     * Data](https://developers.google.com/pay/api/android/reference/object.PaymentData)
-     */
+
     private fun handleGooglePayload(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson() ?: return
         try {
