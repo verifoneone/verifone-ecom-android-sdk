@@ -1,9 +1,7 @@
 package com.verifone.connectors.screens
 
-import android.R.attr.*
 import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -23,8 +21,6 @@ import com.verifone.connectors.datapack.configuration.PayerCardData
 import com.verifone.connectors.util.CardEncryption
 import com.verifone.connectors.util.CreditCardInputResult
 import com.verifone.connectors.util.VerifoneCardValidator
-import java.io.IOException
-import java.io.NotSerializableException
 import java.io.Serializable
 
 
@@ -198,7 +194,7 @@ internal class CardFormScreen():DialogFragment() {
             if (!expiryValid){
                 expiryDateInputLayout.isErrorEnabled = true
                 expiryDateHintTV.setTextColor(resources.getColor(R.color.error_red))
-                expiryDateInputLayout.error = getString(R.string.cardExpired)
+                expiryDateInputLayout.error = getString(R.string.cardExpiryDateFormat)
             } else {
                 expiryDateInputLayout.isErrorEnabled = false
                 expiryDateHintTV.setTextColor(colorCodeHint)
@@ -241,7 +237,6 @@ internal class CardFormScreen():DialogFragment() {
                 val expYear = selectedYear
                 val cvcNumber = cvcNumberInput.text.toString()
                 var encryptedCard = ""
-                var encryptedCardReuse = ""
                 if (publicKey.isNotEmpty()) {
                     mEncryption = CardEncryption(
                         expMonth,
@@ -283,8 +278,6 @@ internal class CardFormScreen():DialogFragment() {
         }
 
         closeBtn.setOnClickListener {
-            //val emptyCard = PayerCardData()
-            //onCardInputDone("", "", emptyCard, false)
             dismiss()
         }
 
@@ -312,7 +305,6 @@ internal class CardFormScreen():DialogFragment() {
         }
         customizeForm()
         setupUserFontResource()
-        //addCVVMargin()
         return formView
     }
 
@@ -432,9 +424,13 @@ internal class CardFormScreen():DialogFragment() {
         }
     }
 
-    private fun validateExpiryDate(expiryDate: String):Boolean {
+    private fun validateExpiryDateFormat(expiryDate: String):Boolean {
         val currentLength = expiryDate.length
         if (currentLength < 5) return false
+        val yearFirstChar = expiryDate[3]
+        val yearSecondChar = expiryDate[4]
+        val tempExpYear = ("20"+yearFirstChar+yearSecondChar).toInt()
+        if (tempExpYear>2099) return false
         if (currentLength >= 2) {
             val firstChar = expiryDate[0]
             val secondChar = expiryDate[1]
@@ -442,7 +438,9 @@ internal class CardFormScreen():DialogFragment() {
                 var secondDigit = 0
                 try {
                     secondDigit = Integer.parseInt("" + secondChar)
-                } catch (e: NumberFormatException){}
+                } catch (e: NumberFormatException){
+                    isExpiryDateInputValid = false
+                }
                 if (secondDigit in 1..9) {
                     isExpiryDateInputValid = true
                 }
@@ -471,7 +469,7 @@ internal class CardFormScreen():DialogFragment() {
         var applySeparator = true
         current = s.toString()
         applySeparator = before <= 0
-
+        val containsSeparator = s?.contains("/")?:false
         val len = current.length-1
 
         if (len == -1) return
@@ -481,9 +479,12 @@ internal class CardFormScreen():DialogFragment() {
         }
         val currentLength = s?.length?:0
         if (currentLength>=2) {
-            val mon = s?.substring(0, 2)?.toInt()?:0
-            selectedMonth = mon
-
+            selectedMonth = try {
+                val mon = s?.substring(0, 2)?.toInt()?:0
+                mon
+            } catch (e:NumberFormatException) {
+                -1
+            }
         } else if (currentLength<2) {
             selectedMonth = -1
         }
@@ -500,18 +501,20 @@ internal class CardFormScreen():DialogFragment() {
         } else if (currentLength<5) {
             selectedYear = -1
         }
-        if (currentLength==2 && applySeparator) {
+        if (currentLength==2 && applySeparator&&!containsSeparator) {
             val pad = s.toString()+"/"
             expiryDateEdit.setText(pad)
             expiryDateEdit.setSelection(pad.length)
-        } else if (currentLength==3 && s?.last() !='/'&& applySeparator) {
+        } else if (currentLength==3 && s?.last() !='/'&& applySeparator&&!containsSeparator) {
             val lastChar = s?.last()
             val temp = s?.subSequence(0, 2).toString()+"/"+lastChar
             expiryDateEdit.setText(temp)
             expiryDateEdit.setSelection(temp.length)
         }
-        validResult = validateExpiryDate(current)
+        validResult = validateExpiryDateFormat(current)
+        isExpiryDateInputValid = validResult
         updateExpiryDateValidityView(validResult)
+
         if (validResult) updateIsExpiredView(expValid)
     }
 

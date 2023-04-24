@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="close_btn_size">32dp</dimen>
+    <dimen name="cvv_logo_height">36dp</dimen>
+    <dimen name="cvv_logo_width">55dp</dimen>
+</resources>

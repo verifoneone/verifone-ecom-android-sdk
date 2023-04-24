@@ -133,30 +133,16 @@ internal class VerifoneCardValidator {
         fun validateExpiryDate(month: Int, year: Int): Boolean {
             if (month < 1 || year < 1) return false
             val cal = Calendar.getInstance()
-            val curMonth = cal[Calendar.MONTH] + 1
-            val curYear = cal[Calendar.YEAR]
+            val currentMonth = cal[Calendar.MONTH] + 1
+            val currentYear = cal[Calendar.YEAR]
 
-            return if (curYear == year) {
-                curMonth <= month
+            if (month > 12) return false
+            if (year>2099) return false
+            return if (currentYear == year) {
+                currentMonth <= month
             } else {
-                curYear < year
+                currentYear < year
             }
-        }
-
-        fun validateExpiryDate(month: String, year: String):Boolean{
-            if (year.length != 4 && year.length != 2) {
-                return false
-            }
-            val iMonth: Int
-            val iYear: Int
-            try {
-                iMonth = month.toInt()
-                iYear = year.toInt()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-            return validateExpiryDate(iMonth, iYear)
         }
 
         fun validateCVV(cvv: String, card: Cards?): Boolean {
@@ -167,8 +153,5 @@ internal class VerifoneCardValidator {
             return false
         }
 
-        fun validateCVV(cvv: Int, card: Cards):Boolean{
-            return validateCVV(cvv.toString(), card)
-        }
     }
 }

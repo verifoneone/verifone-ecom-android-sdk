@@ -23,8 +23,7 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
     private lateinit var mMobilePayOptionBtn:ConstraintLayout
     private lateinit var mVippsOptionBtn:ConstraintLayout
     private lateinit var mCloseBtn:AppCompatImageView
-    //var startCardFlow = startCardFlowParam
-    //var startPayPalFlow = startPayPalFlowParam
+
     val payMethodSelected = onPayMethodSelected
     val paymentOptionButtons = ArrayList<ConstraintLayout>(2)
     val paymentOptionImages = ArrayList<AppCompatImageView>(2)
@@ -74,7 +73,6 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
                 mCardOptionBtn = paymentOptionButtons[i]
                 mCardOptionBtn.visibility = View.VISIBLE
                 mCardOptionBtn.setOnClickListener {
-                    //startCardFlow(true)
                     payMethodSelected(VerifonePaymentOptions.paymentOptionCard)
                     dismiss()
                 }
@@ -84,7 +82,6 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
                 mPaypalOptionBtn = paymentOptionButtons[i]
                 mPaypalOptionBtn.visibility = View.VISIBLE
                 mPaypalOptionBtn.setOnClickListener {
-                    //startPayPalFlow()
                     payMethodSelected(VerifonePaymentOptions.paymentOptionPayPal)
                     dismiss()
                 }
@@ -94,13 +91,12 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
                 mGooglePayOptionBtn = paymentOptionButtons[i]
                 mGooglePayOptionBtn.visibility = View.VISIBLE
                 mGooglePayOptionBtn.setOnClickListener {
-                    //startPayPalFlow()
                     payMethodSelected(VerifonePaymentOptions.paymentOptionGooglePay)
                     dismiss()
                 }
                 paymentOptionTexts[i].setText(R.string.paymentProductTitleGooglePay)
                 paymentOptionImages[i].setImageResource(R.drawable.sv_google_pay_logo)
-                //paymentOptionImages[i].backgroundTintList = ColorStateList()
+
             } else if (index == VerifonePaymentOptions.paymentOptionKlarna) {
                 mKlarnaPayOptionBtn = paymentOptionButtons[i]
                 mKlarnaPayOptionBtn.visibility = View.VISIBLE
