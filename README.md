@@ -18,7 +18,7 @@ Verifone SDKs provide the ability to encrypt and validate card payments, handles
 The SDK can be built using the assemble gradle task or fetched from the release page in github and added to your build.gradle.
 
 ```kotlin
-implementation files('/path/to/VerifoneAndroidLIB-release-1.1.1.aar')
+implementation files('/path/to/VerifoneAndroidLIB-release-1.1.2.aar')
 ```
 
 ###### Dependencies
