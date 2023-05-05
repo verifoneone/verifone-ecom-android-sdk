@@ -7,7 +7,7 @@ Verifone SDKs provide the ability to encrypt and validate card payments, handles
 - Android Studio Arctic Fox or above
 - Kotlin 1.4.30 or higher
 
-### Suppported Payment Methods
+### Supported Payment Methods
 
 - Credit Cards (with 3D Secure support)
 - Paypal
@@ -18,7 +18,7 @@ Verifone SDKs provide the ability to encrypt and validate card payments, handles
 The SDK can be built using the assemble gradle task or fetched from the release page in github and added to your build.gradle.
 
 ```kotlin
-implementation files('/path/to/VerifoneAndroidLIB-release-1.1.2.aar')
+implementation files('/path/to/VerifoneAndroidLIB-release-1.1.3.aar')
 ```
 
 ###### Dependencies
@@ -189,6 +189,190 @@ private val vippsPayReceiver = createVippsPayReceiver()
         }
         return vippsContract
     }
+```
+
+###### 3DS Setup
+If 3DS is required we provide a wrapper around the cardinal commerce SDK to simplify the the 3ds flow, example below:
+
+**Step 1: Setup JWT token**
+
+```kotlin
+//setting up jwt token creation
+createJWTControl = JwtCreateController(this,::getJWTCallDone)
+val threedContractID = "merchant contract id"
+createJWTControl.startCreateJWTRequest(threedContractID)
+
+//starting jwt token create sample code
+fun startCreateJWTRequest(threeds_contract_id:String) {
+val mRetrofitClient =
+    TestRetrofitClientInstance.getClientInstanceAuth(TestRetrofitClientInstance.BASE_URL_JWT,authInterceptor)
+val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
+
+val requestObject = RequestJwtObject(threeds_contract_id)
+
+val requestObs = inputApi.createJWT(requestObject)
+
+requestObs.subscribeOn(Schedulers.newThread())
+    .observeOn(AndroidSchedulers.mainThread())
+    .map { result->result }
+    .subscribe(resultHandler)
+}
+
+//getting the jwt from API call response
+//callback function example for
+private fun getJWTCallDone(response: JWTResponse) {
+    if (response.api_fail_message.isEmpty()) {
+        
+        val jwt_token = response.jwt
+        
+        initThreeDSecure(jwt_token)
+        } else {
+           //api call failed display error message
+        }
+
+    }
+```
+
+**Step 2: init Verifone 3DS SDK**
+
+```kotlin
+ private fun initThreeDSecure(jwt: String) {
+        val configurationThreeds = ThreedsConfigurationData(this, jwt)
+        mVerifone3DSecureManager = Verifone3DSecureManager(
+            configurationThreeds,
+            ::onThreedsSetupDone,
+            ::onThreeDValidationResult
+        )
+        mVerifone3DSecureManager.cardinalValidateTS()//starts the actual 3ds SDK validation
+ }
+ val configurationThreeds = ThreedsConfigurationData(this, jwt)//contains the config data for 3ds SDK
+ ::onThreedsSetupDone,//callback method for setup complete , in this method the next step is starting the lookup request
+ ::onThreeDValidationResult//callback method for validating transaction , called when validation is complete
+ 
+ //sample callback function that 3ds SDK will call when setup completes
+ private fun onThreedsSetupDone(deviceID: String) {
+    startLookupRequest(deviceID, encryptedPayerCard, receivedKeyAlias) // starting the lookup request with device id returned by the 3ds SDK and the ecnrypted card
+ }
+```
+
+
+**Step 3: lookup request**
+
+```kotlin
+    //setting up parameters for lookup API call(main API request json object creation)
+     private fun initLookupObject(deviceID:String, encryptedCard:String, keyAlias:String,amount:Double): ThreedLookupObject {
+        val requestObject = ThreedLookupObject()
+            requestObject.billing_first_name = "john"
+            requestObject.billing_last_name = "smith"
+            requestObject.billing_phone = "5551232134"
+            requestObject.billing_address_1 = "input payer address"
+            requestObject.billing_city = "billing city"
+            requestObject.billing_postal_code = "postal code"
+            requestObject.billing_state = "billing state"
+            requestObject.amount = (amount).toInt()
+            requestObject.currency_code = "currency code"
+            requestObject.card = encryptedCard
+            requestObject.publicKeyAlias = keyAlias
+            requestObject.threeds_contract_id = "merchant contract id (string value)"
+            requestObject.merchant_reference = "merchant reference (string value)"
+            requestObject.device_info_id = deviceID
+            requestObject.email = "john@gmail.com"
+            requestObject.token = "3134324"
+            return requestObject
+        }
+        
+        
+    //in this sample we use retrofit for the lookup api call
+    @POST("v2/lookup")
+    fun threedsLookup(@Header("Content-Type") contentType:String,@Body dataParams: ThreedLookupObject):Observable<LookupResponse>
+            
+            
+    //starting the lookup API call  
+    fun startLookupRequest(deviceID:String, card:String, receivedKeyAlias:String,amount:Double) {
+        val mRetrofitClient =
+            TestRetrofitClientInstance.getClientInstanceAuth(TestRetrofitClientInstance.BASE_URL_JWT,authInterceptor)
+        val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
+
+
+        val lookupObject = initLookupObject(deviceID,card,receivedKeyAlias,amount)
+        val requestObs = inputApi.threedsLookup("application/json",lookupObject)
+
+        requestObs.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { result->result }
+            .subscribe(orderResultHandler)
+    }
+```
+
+**Step 4: 3DS identity validation**
+
+```kotlin
+     //after the lookup request we use cardinal with the response payload and transaction id to validate user identity and obtain 3ds payload from the the SDK
+     mThreeDSVersion = response.threeds_version
+        mVerifone3DSecureManager.continueThreedsValidation(
+            response.transaction_id,
+            response.payload,
+            this
+        )//this function continues the 3ds validation flow to step 3
+```
+
+**Step 5: final card payment api call**
+3ds SDK validation is done and the final card payments API call to our backend services can begin
+After the validation is complete we will get a "ThreedsValidationData" parameter that is the 3ds payload required for card payments api call
+```kotlin
+ private fun onThreeDValidationResult(authData: ThreedsValidationData) {
+        if (authData.validationStatus == "fail") {
+            runOnUiThread {
+               //display error message 3ds validation failed
+            }
+            return
+        }
+        val mCardAuth3D = ThreedsValidationData(
+            authData.eciFlag,
+            authData.enrolled,
+            authData.cavv,
+            authData.paresStatus,
+            authData.signatureVerification,
+            authData.dsTransactionId,
+            authData.xid
+        )//here we create a 3ds payload in JSON format for the card payments final api call
+        
+        val currencyParam = "USD"
+        val merchantReferenceParam = "merchant_ref"
+      
+        ........
+      
+        mCardPayController.startCardPaymentDataRequest(encryptedCard,payment_provider_contract,amount,auth_type,capture_now,merchant_reference,card_brand,currency_code,dynamic_descriptor,keyAlias,threedData)
+        
+    ........
+    
+    //sample function for final card payments api call
+    
+   fun startCardPaymentDataRequest(encryptedCard:String,payment_provider_contract:String, amount:Double,auth_type:String,capture_now:Boolean ,merchant_reference:String, card_brand:String, currency_code:String, dynamic_descriptor:String,keyAlias:String,threedValidation: ThreedsValidationData? = null) {
+        val contentType = "application/json"
+        val mRetrofitClient = TestRetrofitClientInstance.getClientInstanceAuth(TestRetrofitClientInstance.BASE_URL_CONNECTORS,authInterceptor)
+        val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
+
+        val requestObject = CardPaymentObject(encryptedCard,payment_provider_contract,amount,auth_type,capture_now,
+            merchant_reference,
+            card_brand,
+            currency_code,
+            dynamic_descriptor,
+            threedValidation,//threeds validation object created with 3ds SDK
+            keyAlias
+        )
+
+        val requestObs: Observable<CardPaymentResponse> = inputApi.sendCardPaymentData(contentType,requestObject)
+        requestObs.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { result->result }
+            .subscribe(resultHandler)
+    }
+    
+    .......
+    
+    @POST("v2/transactions/card")
+    fun sendCardPaymentData(@Header("Content-Type") contentType:String,  @Body params: CardPaymentObject): Observable<CardPaymentResponse>
 ```
 
 
