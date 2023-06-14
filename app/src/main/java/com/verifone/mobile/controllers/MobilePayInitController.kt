@@ -1,13 +1,10 @@
 package com.verifone.mobile.controllers
 
 import android.content.Context
-import com.verifone.connectors.mobilepay.MobilepayManager
 import com.verifone.mobile.TestRetrofitClientInstance
-import com.verifone.mobile.dataobjects.RequestJwtObject
 import com.verifone.mobile.dataobjects.mobilepay.InitMobilePayResponse
 import com.verifone.mobile.dataobjects.mobilepay.MobilePayInitObject
 import com.verifone.mobile.interfaces.MainAppRestApi
-import com.verifone.mobile.responses.JWTResponse
 import com.verifone.mobile.screens.CustomizationSettings
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,8 +43,8 @@ class MobilePayInitController(ctx: Context,onMobilePayInit: (responseObject:Init
         val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
 
         val requestObject = MobilePayInitObject()
-        requestObject.paymentProviderContract = CustomizationSettings.getMobilepayContract(mCtx)
-        requestObject.customer = CustomizationSettings.getMobilepayCustomer(mCtx)
+        requestObject.paymentProviderContract = CustomizationSettings.getPaymentsProviderContract(mCtx)
+        requestObject.customer = CustomizationSettings.getPaymentCustomerID(mCtx)
         requestObject.currencyCode = currencyParam
 
         val requestObs = inputApi.initMobilePayRequest(idempotencyKey,requestObject)

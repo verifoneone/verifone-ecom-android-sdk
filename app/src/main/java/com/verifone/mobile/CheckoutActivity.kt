@@ -410,7 +410,7 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
     private fun onKlarnaTransactionSuccess(response: KlarnaFinalValidationResponse) {
         progressDialog.dismiss()
         if (response.status == "AUTHORIZED") {
-            gotoPaymentDoneScreen(response.inStoreReference,PaymentFlowDone.TransactionType.typeKlarna.name ,"" + response.amount,CustomizationSettings.getKlarnaCustomerID(this),"SEK")
+            gotoPaymentDoneScreen(response.inStoreReference,PaymentFlowDone.TransactionType.typeKlarna.name ,"" + response.amount,CustomizationSettings.getPaymentCustomerID(this),"SEK")
         } else {
             Toast.makeText(CheckoutActivity@this,getString(R.string.klarna_failed),Toast.LENGTH_LONG).show()
         }
@@ -619,7 +619,7 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
         val eciFlag = decodedThreedsData.validationResult.eciFlag
         val paresStatus = decodedThreedsData.validationResult.paresStatus
         val sigVerification = decodedThreedsData.validationResult.signatureVerification
-        val dsTransactionID = ""
+        val dsTransactionID = dsTransactionID
         val xid = decodedThreedsData.validationResult.xid
 
         val threedAuth = ThreedsValidationData(
@@ -688,12 +688,14 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
 
     }
     var threedsAuthID = ""
+    var dsTransactionID = ""
     override fun lookupRequestSuccess(response: TestLookupResponse) {
         if (mReportingDlg !=null && mReportingDlg!!.isVisible){
             mReportingDlg!!.dismiss()
         }
         threedsAuthID = response.authentication_id
         mThreeDSVersion = response.threeds_version
+        dsTransactionID = response.ds_transaction_id
         mVerifone3DSecureManager?.continueTSValidation(
             response.transaction_id,
             response.payload,

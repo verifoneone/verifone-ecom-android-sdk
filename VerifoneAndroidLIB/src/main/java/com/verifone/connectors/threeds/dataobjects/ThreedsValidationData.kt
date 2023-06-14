@@ -3,7 +3,7 @@ package com.verifone.connectors.threeds.dataobjects
 import com.google.gson.annotations.SerializedName
 
 class ThreedsValidationData(eciFlag: String?, enrolledParam: String?, cavvParam: String?,
-                            paresStatus: String?, signatureVerification: String?, dsTransactionId: String?, xidParam:String?
+                            paresStatus: String?, signatureVerification: String?, dsTransactionID: String?, xidParam:String?
 )
 {
     constructor() : this("","","","","","","") {
@@ -29,7 +29,7 @@ class ThreedsValidationData(eciFlag: String?, enrolledParam: String?, cavvParam:
     var xid = xidParam
 
     @SerializedName("ds_transaction_id")
-    var dsTransactionId = dsTransactionId
+    var dsTransactionId = dsTransactionID
 
     @SerializedName("signature_verification")
     var signatureVerification = signatureVerification

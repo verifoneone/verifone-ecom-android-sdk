@@ -108,13 +108,6 @@ internal class CardEncryption {
                         while (pubKeysIterator.hasNext()) {
                             val pgpPublicKey = pubKeysIterator.next()
                             if (pgpPublicKey.isEncryptionKey) {
-                                Log.d(
-                                    "pgp",
-                                    pgpPublicKey.javaClass.name + " KeyID: "
-                                            + java.lang.Long.toHexString(pgpPublicKey.keyID) + " type: "
-                                            + pgpPublicKey.algorithm + " fingerprint: "
-                                            + String(Hex.encode(pgpPublicKey.fingerprint))
-                                )
                                 val bcKey = pgpPublicKey.publicKeyPacket.key
                                 if (bcKey is ECDHPublicBCPGKey) {
                                     ecDHKey = bcKey

@@ -13,9 +13,16 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.*
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.verifone.mobile.R
+import android.net.Uri
+import android.os.Build
+import com.verifone.mobile.dialogs.ErrorDisplayDialog
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 
@@ -45,18 +52,12 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         const val keyGooglePayInputMerchantName = "google_pay_input_merchant_name"
         const val keyGooglePayInputMerchantID = "google_pay_input_merchant_id"
 
-        const val keySwishPPC = "SwishPPC"
-        const val keySwishEntityId = "SwishEntityId"
 
-        const val keyKlarnaCustomerID = "klarnaCustomerID"
-        const val keyKlarnaOrdID = "klarnaOrgID"
 
-        const val keyMobilepayProviderContract = "mobilepayPPC"
-        const val keyMobilepayCustomerID = "mobilepayCustomerID"
-        const val keyMobilepayOrgID = "mobilepayOrgID"
+        const val keyPaymentCustomerID = "klarnaCustomerID"
+        const val keyPaymentOrganizationID = "klarnaOrgID"
 
-        const val keyVippsProviderContract = "vippsPPC"
-        const val keyVippsCustomerID = "vippsCustomerID"
+
 
 
         fun getStoredLanguage(ctx:Context):String {
@@ -136,51 +137,17 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             return sharedPref.getString(keyCardEncryptionKey,"")?:""
         }
 
-        fun getSwishPPC(ctx:Context):String {
+
+
+
+        fun getPaymentOrgID(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keySwishPPC,"")?:""
+            return sharedPref.getString(keyPaymentOrganizationID,"")?:""
         }
 
-        fun getSwishEntityID(ctx:Context):String {
+        fun getPaymentCustomerID(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keySwishEntityId,"")?:""
-        }
-
-
-        fun getKlarnaOrgID(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyKlarnaOrdID,"")?:""
-        }
-
-        fun getKlarnaCustomerID(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyKlarnaCustomerID,"")?:""
-        }
-
-
-        fun getMobilepayOrgID(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyMobilepayOrgID,"")?:""
-        }
-
-        fun getMobilepayCustomer(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyMobilepayCustomerID,"")?:""
-        }
-        fun getMobilepayContract(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyMobilepayProviderContract,"")?:""
-        }
-
-
-
-        fun getVippsCustomer(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyVippsCustomerID,"")?:""
-        }
-        fun getVippsContract(ctx:Context):String {
-            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
-            return sharedPref.getString(keyVippsProviderContract,"")?:""
+            return sharedPref.getString(keyPaymentCustomerID,"")?:""
         }
 
     }
@@ -217,6 +184,22 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     lateinit var showSwishCheck:CheckBox
     lateinit var showMobilePayCheck:CheckBox
     lateinit var showVippsCheck:CheckBox
+
+    private fun inputValuesFromJson(jsonConfig:JSONObject) {
+
+        if (jsonConfig.has("api_user_id")) cardPaymentsApiUserName.setText(jsonConfig.getString("api_user_id"))
+        if (jsonConfig.has("api_key")) cardPaymentsApiKey.setText(jsonConfig.getString("api_key"))
+        if (jsonConfig.has("encryption_key")) cardEncryptionKeyEd.setText(jsonConfig.getString("encryption_key"))
+        if (jsonConfig.has("public_key_alias")) jwtKeyAliasInput.setText(jsonConfig.getString("public_key_alias"))
+        if (jsonConfig.has("threeds_contract_id")) jwtContractIDInput.setText(jsonConfig.getString("threeds_contract_id"))
+        if (jsonConfig.has("payment_provider_contract")) cardPaymentsProviderContract.setText(jsonConfig.getString("payment_provider_contract"))
+        if (jsonConfig.has("paypal_provider_contract")) paypalPaymentsProviderContract.setText(jsonConfig.getString("paypal_provider_contract"))
+        if (jsonConfig.has("token_scope")) cardPaymentsReuseTokenScope.setText(jsonConfig.getString("token_scope"))
+        if (jsonConfig.has("entity_id")) edKlarnaOrgID.setText(jsonConfig.getString("entity_id"))
+        if (jsonConfig.has("customer")) edKlarnaCustomer.setText(jsonConfig.getString("customer"))
+    }
+
+    private val loadConfigBtn by lazy { findViewById<AppCompatButton>(R.id.json_config_btn) }
     private val enableThreedsCheck by lazy { findViewById<CheckBox>(R.id.checkbox_option_3ds) }
 
     private val jwtKeyAliasInput by lazy { findViewById<TextInputEditText>(R.id.jwt_key_alias_edit) }
@@ -235,19 +218,8 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     private val edGooglePayInputMerchantName by lazy { findViewById<TextInputEditText>(R.id.google_pay_input_merchant_name_edit) }
     private val edGooglePayInputMerchantID by lazy { findViewById<TextInputEditText>(R.id.google_pay_input_merchant_id_edit) }
 
-    private val edSwishPaymentsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_swish_payment_provider_contract_edit) }
-    private val edSwishPaymentsEntityID by lazy { findViewById<TextInputEditText>(R.id.request_swish_payment_entity_id_edit) }
-
-
     private val edKlarnaOrgID by lazy { findViewById<TextInputEditText>(R.id.request_klarna_org_id_edit) }
     private val edKlarnaCustomer by lazy { findViewById<TextInputEditText>(R.id.request_klarna_customer_id_edit) }
-
-    private val edMobilePayOrgID by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_org_id_edit) }
-    private val edMobilePayCustomer by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_customer_edit) }
-    private val edMobilePayProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_mobilepay_provider_contract_edit) }
-
-    private val edVippsCustomer by lazy { findViewById<TextInputEditText>(R.id.request_vipps_customer_edit) }
-    private val edVippsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_vipps_payment_provider_contract_edit) }
 
     lateinit var showSetupLanguageTV:AppCompatTextView
     var currentLanguage = "EN"
@@ -413,6 +385,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             finish()
         }
 
+        loadConfigBtn.setOnClickListener {
+            openFile()
+        }
+
         initFontsDropDown()
         initRegionDropDown()
         loadFormDetails()
@@ -474,19 +450,8 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         edGooglePayInputMerchantName.setText(getGooglePayInputMerchantName(this))
         edGooglePayInputMerchantID.setText(getGooglePayInputMerchantID(this))
 
-        edSwishPaymentsProviderContract.setText(getSwishPPC(this))
-        edSwishPaymentsEntityID.setText(getSwishEntityID(this))
-
-        edKlarnaOrgID.setText(getKlarnaOrgID(this))
-        edKlarnaCustomer.setText(getKlarnaCustomerID(this))
-
-        edMobilePayCustomer.setText(getMobilepayCustomer(this))
-        edMobilePayOrgID.setText(getMobilepayOrgID(this))
-        edMobilePayProviderContract.setText(getMobilepayContract(this))
-
-        edVippsCustomer.setText(getVippsCustomer(this))
-
-        edVippsProviderContract.setText(getVippsContract(this))
+        edKlarnaOrgID.setText(getPaymentOrgID(this))
+        edKlarnaCustomer.setText(getPaymentCustomerID(this))
 
     }
 
@@ -500,6 +465,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         return sharedPref.getString("key_store_rec","")?:""
     }
 
+    fun gotoLangSelectionScreen() {
+        val langScreen = Intent(this,LanguageSelection::class.java)
+        startActivityForResult(langScreen,LanguageSelection.reqCode)
+    }
 
     private fun saveLanguage(lang:String) {
         if (lang.isEmpty()) return
@@ -647,22 +616,9 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             .putString(keyGooglePayInputMerchantName,edGooglePayInputMerchantName.text.toString())
             .putString(keyGooglePayInputMerchantID,edGooglePayInputMerchantID.text.toString())
             .putString(keyCardEncryptionKey,cardEncryptionKeyEd.text.toString())
-            .putString(keySwishPPC,edSwishPaymentsProviderContract.text.toString())
-            .putString(keySwishEntityId,edSwishPaymentsEntityID.text.toString())
-            .putString(keyKlarnaCustomerID,edKlarnaCustomer.text.toString())
-            .putString(keyKlarnaOrdID,edKlarnaOrgID.text.toString())
-            .putString(keyMobilepayProviderContract,edMobilePayProviderContract.text.toString())
-            .putString(keyMobilepayOrgID,edMobilePayOrgID.text.toString())
-            .putString(keyMobilepayCustomerID,edMobilePayCustomer.text.toString())
-            .putString(keyVippsProviderContract,edVippsProviderContract.text.toString())
-
-            .putString(keyVippsCustomerID,edVippsCustomer.text.toString())
+            .putString(keyPaymentCustomerID,edKlarnaCustomer.text.toString())
+            .putString(keyPaymentOrganizationID,edKlarnaOrgID.text.toString())
             .apply()
-    }
-
-    fun gotoLangSelectionScreen() {
-        val langScreen = Intent(this,LanguageSelection::class.java)
-        startActivityForResult(langScreen,LanguageSelection.reqCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -671,6 +627,9 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             languageSelection = data?.getStringExtra(LanguageSelection.keySelectedLand)?:""
             showSetupLanguageTV.text = languageSelection
 
+        } else if (requestCode == PICK_JSON_FILE && resultCode != 0){
+            val configUri = data?.data?:Uri.parse("")
+            loadJsonFileConfig(configUri)
         }
     }
     fun initFontsDropDown() {
@@ -735,4 +694,40 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
     }
+
+    private fun loadJsonFileConfig(configUri:Uri):JSONObject {
+
+        val configInput = contentResolver.openInputStream(configUri)
+        val configBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            configInput!!.readAllBytes()
+        } else null
+        var configJson = JSONObject()
+        val configContent = configBytes?.let { String(it, StandardCharsets.UTF_8) }
+        if (configContent!=null && configContent.isNotEmpty()){
+            configJson = JSONObject(configContent)
+            inputValuesFromJson(configJson)
+        } else {
+            ErrorDisplayDialog.newInstance("Upload json config", "failed to upload").show(
+                supportFragmentManager,
+                "error"
+            )
+        }
+        configInput?.close()
+        return  configJson
+    }
+
+
+    val PICK_JSON_FILE = 121
+
+    private fun openFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/json"
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+            //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+        }
+        startActivityForResult(intent, PICK_JSON_FILE)
+    }
+
 }

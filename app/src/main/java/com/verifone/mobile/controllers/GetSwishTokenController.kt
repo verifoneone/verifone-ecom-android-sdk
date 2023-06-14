@@ -1,14 +1,10 @@
 package com.verifone.mobile.controllers
 
 import android.content.Context
-import android.util.Log
 import com.verifone.mobile.TestRetrofitClientInstance
-import com.verifone.mobile.dataobjects.RequestJwtObject
 import com.verifone.mobile.dataobjects.swish.SwishTokenRequestObject
 import com.verifone.mobile.dataobjects.swish.SwishTokenResponse
 import com.verifone.mobile.interfaces.MainAppRestApi
-import com.verifone.mobile.responses.JWTResponse
-import com.verifone.mobile.responses.cardpayments.CardPaymentResponse
 import com.verifone.mobile.screens.CustomizationSettings
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,8 +44,8 @@ class GetSwishTokenController(ctx: Context,onSwishTokenGet: (transactionID:Strin
         val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
 
         val requestObject = SwishTokenRequestObject()
-        requestObject.paymentProviderContract = CustomizationSettings.getSwishPPC(mCtx)
-        requestObject.entityId = CustomizationSettings.getSwishEntityID(mCtx)
+        requestObject.paymentProviderContract = CustomizationSettings.getPaymentsProviderContract(mCtx)
+        requestObject.entityId = CustomizationSettings.getPaymentOrgID(mCtx)
 
         requestObject.currencyCode = currencyParam
 

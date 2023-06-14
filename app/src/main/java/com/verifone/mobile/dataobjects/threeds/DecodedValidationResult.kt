@@ -33,4 +33,10 @@ class DecodedValidationResult {
 
     @SerializedName("xid")
     var xid = ""
+
+    @SerializedName("acs_transaction_id")
+    var acsTransactionID = ""
+
+    @SerializedName("ds_transaction_id")
+    var dsTransactionID = ""
 }

@@ -8,7 +8,7 @@
     <string name="klarna_cancel" translatable="false">Canceled klarna payment</string>
     <string name="klarna_failed" translatable="false">Klarna payment failed</string>
     <string name="invalid_currency_str" translatable="false">"Invalid Currency"</string>
-
+    <string name="json_config_label" translatable="false">Load json</string>
     <string name="pay_flow_label" translatable="false">Payment</string>
     <string name="use_paypal_label" translatable="false">Use paypal</string>
 
@@ -60,8 +60,8 @@
     <string name="settings_klarna_api_user" translatable="false">Klarna api user</string>
     <string name="settings_klarna_api_key" translatable="false">Klarna api key</string>
     <string name="settings_klarna_card_ppc" translatable="false">Klarna card ppc</string>
-    <string name="settings_klarna_customer_id" translatable="false">Klarna customer</string>
-    <string name="settings_klarna_org_id" translatable="false">Klarna org id</string>
+    <string name="settings_payments_customer_id" translatable="false">Payments customer</string>
+    <string name="settings_payments_org_id" translatable="false">Payments org id</string>
 
     <string name="settings_mobilepay_org" translatable="false">Mobile pay org id</string>
     <string name="settings_mobilepay_contract" translatable="false">Mobile pay provider contract</string>
@@ -101,7 +101,7 @@
     <string name="settings_vipps_tab_tile" translatable="false">Vipps parameters</string>
     <string name="settings_swish_tab_tile" translatable="false">Swish parameters</string>
     <string name="settings_mobilepay_tab_tile" translatable="false">Mobilepay parameters</string>
-    <string name="settings_klarna_tab_tile" translatable="false">Klarna parameters</string>
+    <string name="settings_klarna_tab_tile" translatable="false">Payment parameters</string>
     <string name="settings_google_input_tab_tile" translatable="false">Google pay object parameters</string>
     <string name="settings_google_pay_tab_tile" translatable="false">Google pay request parameters</string>
 

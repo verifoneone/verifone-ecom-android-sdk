@@ -26,6 +26,7 @@
         app:layout_constraintWidth_percent=".96"
         android:layout_height="wrap_content"
         android:hint="@string/settings_card_payments_provider_contract"
+        android:textColorHint="@color/form_text_black"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"

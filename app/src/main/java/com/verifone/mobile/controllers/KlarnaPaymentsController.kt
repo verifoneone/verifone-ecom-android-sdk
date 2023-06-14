@@ -43,8 +43,8 @@ class KlarnaPaymentsController(ctx: Context, randomKeyParam:String, onTokenRecei
 
         val requestObject = KlarnaTokenRequestObject()
 
-        requestObject.entityID = CustomizationSettings.getKlarnaOrgID(mCtx)
-        requestObject.customer =CustomizationSettings.getKlarnaCustomerID(mCtx)
+        requestObject.entityID = CustomizationSettings.getPaymentOrgID(mCtx)
+        requestObject.customer =CustomizationSettings.getPaymentCustomerID(mCtx)
         requestObject.currencyCode = currencyParam
         val requestObs = inputApi.startKlarnaTokenRequest(idempotencyKey,requestObject)
 

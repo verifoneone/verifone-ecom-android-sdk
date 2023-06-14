@@ -47,7 +47,7 @@ class TokenPaymentObject {
     @SerializedName("dynamic_descriptor")
     private var dynamicDescriptor = ""
 
-    //@SerializedName("threed_authentication")
+    @SerializedName("threed_authentication")
     private var threedAuthentication: ThreedsValidationData? = ThreedsValidationData("","","","","","","")
     @SerializedName("shopper_interaction")
     var shopperInteraction = "ECOMMERCE"

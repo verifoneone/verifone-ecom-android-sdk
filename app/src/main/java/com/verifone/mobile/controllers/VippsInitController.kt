@@ -2,7 +2,6 @@ package com.verifone.mobile.controllers
 
 import android.content.Context
 import com.verifone.mobile.TestRetrofitClientInstance
-import com.verifone.mobile.dataobjects.mobilepay.InitMobilePayResponse
 import com.verifone.mobile.interfaces.MainAppRestApi
 import com.verifone.mobile.responses.vipps.VippsInitObject
 import com.verifone.mobile.responses.vipps.VippsInitResponse
@@ -44,8 +43,8 @@ class VippsInitController(ctx: Context,onVippsInitCallback: (responseObject: Vip
         val inputApi = mRetrofitClient.create(MainAppRestApi::class.java)
 
         val requestObject = VippsInitObject()
-        requestObject.paymentProviderContract = CustomizationSettings.getVippsContract(mCtx)
-        requestObject.customer = CustomizationSettings.getVippsCustomer(mCtx)
+        requestObject.paymentProviderContract = CustomizationSettings.getPaymentsProviderContract(mCtx)
+        requestObject.customer = CustomizationSettings.getPaymentCustomerID(mCtx)
 
         requestObject.currencyCode = currencyParam
         val requestObs = inputApi.initMobileVippsPay(idempotencyKey,requestObject)

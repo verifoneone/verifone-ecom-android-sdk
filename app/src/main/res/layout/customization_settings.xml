@@ -76,6 +76,7 @@
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
             android:hint="@string/settings_background_text"
+            android:textColorHint="@color/form_text_black"
             app:hintAnimationEnabled="true"
             app:boxStrokeColor="@color/form_text_grey"
             app:boxStrokeWidth="1dp"
@@ -121,6 +122,7 @@
             app:boxCornerRadiusTopStart="8dp"
             app:hintAnimationEnabled="true"
             android:hint="@string/settings_text_field_text"
+            android:textColorHint="@color/form_text_black"
             app:boxStrokeColor="@color/form_text_grey"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/form_text_black"
@@ -157,6 +159,7 @@
             app:layout_constraintWidth_percent=".6"
             android:layout_height="wrap_content"
             android:hint="@string/settings_text_color_input"
+            android:textColorHint="@color/form_text_black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -197,6 +200,7 @@
             app:layout_constraintWidth_percent=".6"
             android:layout_height="wrap_content"
             android:hint="@string/settings_hint_color_text"
+            android:textColorHint="@color/form_text_black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -239,6 +243,7 @@
             app:layout_constraintWidth_percent=".6"
             android:layout_height="wrap_content"
             android:hint="@string/settings_pay_btn_color"
+            android:textColorHint="@color/form_text_black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -281,6 +286,7 @@
             app:layout_constraintWidth_percent=".6"
             android:layout_height="wrap_content"
             android:hint="@string/settings_form_title_color"
+            android:textColorHint="@color/form_text_black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -321,6 +327,7 @@
             android:textSize="16sp"
             android:padding="10dp"
             android:text="@string/settings_show_recurrent"
+            android:textColor="@color/form_text_black"
             app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/show_recurrent_switch"
             android:layout_width="wrap_content"
@@ -352,6 +359,17 @@
             app:layout_constraintStart_toStartOf="@id/show_recurrent_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/json_config_btn"
+                app:layout_constraintTop_toBottomOf="@id/delete_card_details"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/btn_background"
+                android:text="@string/json_config_label"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/setup_language_label"
@@ -459,52 +477,66 @@
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 app:layout_constraintTop_toBottomOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleCard"
+                android:textColor="@color/form_text_black"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
             <CheckBox
                 android:id="@+id/checkbox_option_paypal"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitlePaypal"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_card"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
 
             <CheckBox
                 android:id="@+id/checkbox_option_google_pay"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleGooglePay"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_paypal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
             <CheckBox
                 android:id="@+id/checkbox_option_klarna"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleKlarna"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_google_pay"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
             <CheckBox
                 android:id="@+id/checkbox_option_swish"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleSwish"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_klarna"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
 
             <CheckBox
                 android:id="@+id/checkbox_option_mobile_pay"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleMobilePay"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_swish"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
             <CheckBox
                 android:id="@+id/checkbox_option_vipps"
                 app:layout_constraintStart_toStartOf="@id/fonts_spinner"
                 android:text="@string/paymentProductTitleVipps"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/checkbox_option_mobile_pay"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 app:layout_constraintTop_toBottomOf="@id/change_font_label"
@@ -521,9 +553,11 @@
                 android:id="@+id/checkbox_option_3ds"
                 app:layout_constraintStart_toStartOf="@id/check_payment_options"
                 android:text="@string/threeds_auth_enable"
+                android:textColor="@color/form_text_black"
                 app:layout_constraintTop_toBottomOf="@id/check_payment_options"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/form_text_black"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.Guideline
@@ -554,24 +588,10 @@
             layout="@layout/paypal_input_data"
             />
 
-        <include
-            android:id="@+id/mobilepay_input_data_fields"
-            layout="@layout/mobilepay_input_data"
-            />
-
-        <include
-            android:id="@+id/swish_input_data_fields"
-            layout="@layout/swish_input_data"
-            />
 
         <include
             android:id="@+id/klarna_input_data_fields"
             layout="@layout/klarna_input_data"
-            />
-
-        <include
-            android:id="@+id/vipps_input_data_fields"
-            layout="@layout/vipps_input_data"
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -590,7 +610,7 @@
             app:layout_constraintEnd_toStartOf="@id/margin_end_guide"
             android:background="@drawable/button_shape"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/vipps_input_data_fields"
+            app:layout_constraintTop_toBottomOf="@id/klarna_input_data_fields"
             android:layout_marginBottom="20dp"
             android:textColor="@android:color/white"
             android:text="@string/cancel_label"
