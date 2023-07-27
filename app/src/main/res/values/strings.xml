@@ -96,6 +96,8 @@
     <string name="settings_paypal_api_user_id" translatable="false">User ID for paypal API</string>
     <string name="settings_paypal_api_key" translatable="false">Auth key for paypal API</string>
 
+    <string name="settings_gift_card_payments_provider_contract" translatable="false">Gift Card payment provider contract</string>
+
     <string name="settings_card_payments_tab_tile" translatable="false">Card payments parameters</string>
     <string name="settings_paypal_tab_tile" translatable="false">Paypal parameters</string>
     <string name="settings_vipps_tab_tile" translatable="false">Vipps parameters</string>
@@ -104,12 +106,15 @@
     <string name="settings_klarna_tab_tile" translatable="false">Payment parameters</string>
     <string name="settings_google_input_tab_tile" translatable="false">Google pay object parameters</string>
     <string name="settings_google_pay_tab_tile" translatable="false">Google pay request parameters</string>
+    <string name="settings_card_gift_tile" translatable="false">Gift Card</string>
+    <string name="settings_card_gift_input_tab_tile" translatable="false">Gift Card PPC</string>
 
     <string name="settings_show_recurrent" translatable="false">Show recurrent payments switch</string>
     <string name="save_label" translatable="false">Save</string>
     <string name="ok_label" translatable="false">OK</string>
     <string name="cancel_label" translatable="false">Cancel</string>
     <string name="remove_stored_card" translatable="false">Remove card details</string>
+    <string name="remove_stored_card2" translatable="false">Remove gift card details</string>
     <string name="change_lang" translatable="false">Change language</string>
     <string name="current_lang" translatable="false">Language:</string>
     <string name="choose_label" translatable="false">Choose language</string>

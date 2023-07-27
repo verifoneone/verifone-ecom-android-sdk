@@ -26,63 +26,66 @@ import java.util.*
 
 internal class CardEncryption {
 
-    private val cardDataObject:JSONObject = JSONObject()
-    private lateinit var merchantPubKey:String
+    private val cardDataObject: JSONObject = JSONObject()
+    private lateinit var merchantPubKey: String
     var isPublicKeyValid = false
 
-    companion object{
+    companion object {
         const val cardDataParam1 = "expiryMonth"
         const val cardDataParam2 = "expiryYear"
         const val cardDataParam3 = "cvv"
         const val cardDataParam4 = "cardNumber"
         const val cardDataParam5 = "captureTime"
+        const val cardDataParam6 = "svcAccessCode"
     }
 
-
     constructor (
-        expiryMonthParam: Int,
-        expiryYearParam: Int,
+        expiryMonthParam: Int? = null,
+        expiryYearParam: Int? = null,
         cardNumberParam: String,
-        cvvNumberParam: String,
-        publicKey: String
+        cvvNumberParam: String? = null,
+        publicKey: String,
+        pinNumberParam: String? = null,
     ) {
         cardDataObject.put(cardDataParam1, expiryMonthParam)
         cardDataObject.put(cardDataParam2, expiryYearParam)
         cardDataObject.put(cardDataParam3, cvvNumberParam)
         cardDataObject.put(cardDataParam4, cardNumberParam)
+        cardDataObject.put(cardDataParam6, pinNumberParam)
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         sdf.timeZone = TimeZone.getTimeZone("GMT")
         val capturedTime = sdf.format(Date())
+
         cardDataObject.put(cardDataParam5, capturedTime)
         if (publicKey.isNotEmpty()) {
             merchantPubKey = publicKey
             try {
                 pgpKey = getPubKeyFromPem(merchantPubKey)
                 isPublicKeyValid = true
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 isPublicKeyValid = false
             }
 
         }
     }
-    private lateinit var ecDHKey:ECDHPublicBCPGKey
-    private var pgpKey:PGPPublicKey? = null
-    private lateinit var encryptedCardPayload:String
-    private fun encodeBase64(paramValue: ByteArray):ByteArray {
+
+    private lateinit var ecDHKey: ECDHPublicBCPGKey
+    private var pgpKey: PGPPublicKey? = null
+    private lateinit var encryptedCardPayload: String
+    private fun encodeBase64(paramValue: ByteArray): ByteArray {
         return Base64.encode(paramValue)
     }
 
-    private fun decodeBase64(encryptedVal: String):String {
+    private fun decodeBase64(encryptedVal: String): String {
         return String(Base64.decode(encryptedVal))
     }
 
-    fun encryptionCard():String {
-
+    fun encryptionCard(): String {
         val cardString = cardDataObject.toString()
         val tempCard: ByteArray
         try {
             tempCard = encrypt(cardString.toByteArray(), pgpKey, true) ?: "".toByteArray()
-        } catch (e:java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             return ""
         }
 
@@ -93,11 +96,10 @@ internal class CardEncryption {
 
     }
 
-
-
     private fun getPubKeyFromPem(@Nullable pem: String?): PGPPublicKey? {
         if (pem != null) {
-            val inputStream: InputStream = ArmoredInputStream(ByteArrayInputStream(decodeBase64(pem).toByteArray()))
+            val inputStream: InputStream =
+                ArmoredInputStream(ByteArrayInputStream(decodeBase64(pem).toByteArray()))
             try {
                 try {
                     val ringCollection = JcaPGPPublicKeyRingCollection(inputStream)
@@ -148,7 +150,11 @@ internal class CardEncryption {
     private val provider = BouncyCastleProvider()
 
     @Throws(PGPException::class)
-    private fun encrypt(message: ByteArray?, publicKey: PGPPublicKey?, armored: Boolean): ByteArray? {
+    private fun encrypt(
+        message: ByteArray?,
+        publicKey: PGPPublicKey?,
+        armored: Boolean
+    ): ByteArray? {
         return try {
             val messageStream = ByteArrayInputStream(message)
             val bOut = ByteArrayOutputStream()
@@ -187,5 +193,4 @@ internal class CardEncryption {
             throw PGPException("Error in encrypt", e)
         }
     }
-
 }

@@ -5,7 +5,7 @@
     android:layout_marginTop="@dimen/settings_tabs_margin"
     android:background="@drawable/customization_section_background"
     app:layout_constraintStart_toStartOf="@id/margin_start_guide"
-    app:layout_constraintTop_toBottomOf="@id/card_payments_data_fields"
+    app:layout_constraintTop_toBottomOf="@id/gift_card_input_data_fields"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatTextView

@@ -7,6 +7,7 @@ import android.content.Context
 class VerifonePaymentOptions(ctx:Context, displayMethods: ArrayList<String>, onPaymentOptionSelected:(paymentOption:String) -> Unit) {
     companion object{
         const val paymentOptionCard = "credit_card_3ds"
+        const val paymentOptionGiftCard = "gift_card"
         const val paymentOptionPayPal = "payPal"
         const val paymentOptionGooglePay = "googlePay"
         const val paymentOptionKlarna = "klarna_payments"

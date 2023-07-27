@@ -56,6 +56,7 @@
    <string name="paymentSelectTitle">Select payment method</string>
 
    <string name="paymentProductTitleCard">Credit Card</string>
+   <string name="paymentProductTitleGiftCard" translatable="false">Gift Card</string>
    <string name="paymentProductTitlePaypal">PayPal</string>
    <string name="paymentProductTitleGooglePay">Google Pay</string>
    <string name="paymentProductTitleKlarna">Klarna</string>
@@ -95,4 +96,8 @@
 
    <string name="klarna_authorize_label" translatable="false">Authorize</string>
    <string name="klarna_finalize_label" translatable="false">Finalize</string>
+
+   <string name="giftCardFormTitle">Gift Card</string>
+   <string name="giftCardFormPin">PIN</string>
+   <string name="giftCardFormPinError">PIN should contain min 4 digits</string>
 </resources>

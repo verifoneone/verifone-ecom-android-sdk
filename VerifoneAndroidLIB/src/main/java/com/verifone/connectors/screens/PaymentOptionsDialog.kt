@@ -16,6 +16,7 @@ import com.verifone.connectors.R
 
 internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPayMethodSelected:(payMethod:String) -> Unit,ctx: Context): Dialog(ctx) {
     private lateinit var mCardOptionBtn:ConstraintLayout
+    private lateinit var mGiftCardOptionBtn:ConstraintLayout
     private lateinit var mPaypalOptionBtn:ConstraintLayout
     private lateinit var mGooglePayOptionBtn:ConstraintLayout
     private lateinit var mKlarnaPayOptionBtn:ConstraintLayout
@@ -43,6 +44,7 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
         paymentOptionButtons.add(findViewById(R.id.pay_option_container5))
         paymentOptionButtons.add(findViewById(R.id.pay_option_container6))
         paymentOptionButtons.add(findViewById(R.id.pay_option_container7))
+        paymentOptionButtons.add(findViewById(R.id.pay_option_container8))
         paymentOptionImages.add(findViewById(R.id.pay_option_image1))
         paymentOptionImages.add(findViewById(R.id.pay_option_image2))
         paymentOptionImages.add(findViewById(R.id.pay_option_image3))
@@ -50,6 +52,7 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
         paymentOptionImages.add(findViewById(R.id.pay_option_image5))
         paymentOptionImages.add(findViewById(R.id.pay_option_image6))
         paymentOptionImages.add(findViewById(R.id.pay_option_image7))
+        paymentOptionImages.add(findViewById(R.id.pay_option_image8))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text1))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text2))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text3))
@@ -57,6 +60,7 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
         paymentOptionTexts.add(findViewById(R.id.pay_option_text5))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text6))
         paymentOptionTexts.add(findViewById(R.id.pay_option_text7))
+        paymentOptionTexts.add(findViewById(R.id.pay_option_text8))
 
         mCloseBtn = findViewById(R.id.close_btn)
         mCloseBtn.setOnClickListener {
@@ -77,6 +81,15 @@ internal class PaymentOptionsDialog(displayOptionsParam: ArrayList<String>,onPay
                     dismiss()
                 }
                 paymentOptionTexts[i].setText(R.string.paymentProductTitleCard)
+                paymentOptionImages[i].setImageResource(R.drawable.card_symbol)
+            } else if (index == VerifonePaymentOptions.paymentOptionGiftCard) {
+                mGiftCardOptionBtn = paymentOptionButtons[i]
+                mGiftCardOptionBtn.visibility = View.VISIBLE
+                mGiftCardOptionBtn.setOnClickListener {
+                    payMethodSelected(VerifonePaymentOptions.paymentOptionGiftCard)
+                    dismiss()
+                }
+                paymentOptionTexts[i].text = "Gift Card"
                 paymentOptionImages[i].setImageResource(R.drawable.card_symbol)
             } else if (index == VerifonePaymentOptions.paymentOptionPayPal) {
                 mPaypalOptionBtn = paymentOptionButtons[i]

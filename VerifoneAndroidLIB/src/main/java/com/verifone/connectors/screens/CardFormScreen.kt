@@ -73,7 +73,6 @@ internal class CardFormScreen():DialogFragment() {
     lateinit var cardNRHintTV:AppCompatTextView
     lateinit var expiryDateHintTV:AppCompatTextView
     lateinit var cvvNRHintTV:AppCompatTextView
-    lateinit var buyerNameHintTV:AppCompatTextView
 
     private lateinit var cardNumberInputLayout:TextInputLayout
     lateinit var expiryDateInputLayout:TextInputLayout
@@ -183,7 +182,7 @@ internal class CardFormScreen():DialogFragment() {
             validateCardNumber(cardNr)
             validateExpiryInput(currentCardExpiryString, 1)
             var creditCardValid = false
-            if (cardNr.length>=15 && isCardValid) {
+            if (cardNr.length>=14 && isCardValid) {
                 creditCardValid = true
             }
 
@@ -259,7 +258,7 @@ internal class CardFormScreen():DialogFragment() {
                 cardInputResultData.cardProperties = cardData
                 cardInputResultData.storeCard = showRecurrentSwitch.isChecked
                 onCardInputDone(
-                   cardInputResultData
+                    cardInputResultData
                 )
                 dismiss()
             }
@@ -524,8 +523,8 @@ internal class CardFormScreen():DialogFragment() {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-           currentCardExpiryString = s.toString()
-           validateExpiryInput(s, before)
+            currentCardExpiryString = s.toString()
+            validateExpiryInput(s, before)
         }
 
         override fun afterTextChanged(s: Editable?) {
@@ -550,7 +549,7 @@ internal class CardFormScreen():DialogFragment() {
                 cvcNumberInputLayout.isErrorEnabled = true
                 if ( foundCard.name == "AMEX")
                     cvcNumberInputLayout.error = getString(R.string.cvv4NotValid)
-                 else cvcNumberInputLayout.error = getString(R.string.cvv3NotValid)
+                else cvcNumberInputLayout.error = getString(R.string.cvv3NotValid)
             }
 
         }
@@ -558,7 +557,7 @@ internal class CardFormScreen():DialogFragment() {
         override fun afterTextChanged(s: Editable?) {
         }
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -607,7 +606,6 @@ internal class CardFormScreen():DialogFragment() {
             colorCodeHint = Color.parseColor(customizationData.hintTextColor)
             expiryDateHintTV.setTextColor(ColorStateList.valueOf(colorCodeHint))
             cardNRHintTV.setTextColor( ColorStateList.valueOf(colorCodeHint))
-            buyerNameHintTV.setTextColor(ColorStateList.valueOf(colorCodeHint))
             cvvNRHintTV.setTextColor( ColorStateList.valueOf(colorCodeHint))
             showRecurrentTV.setTextColor(colorCodeHint)
         } catch (e: java.lang.Exception){
@@ -649,8 +647,6 @@ internal class CardFormScreen():DialogFragment() {
             cvcNumberInputLayout.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             cvvNRHintTV.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             cvcNumberInput.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
-
-            buyerNameHintTV.typeface =ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
 
             showRecurrentTV.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)
             payButton.typeface = ResourcesCompat.getFont(requireContext(),customizationData.userTextFontRes)

@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.verifone.mobile.R
 import android.net.Uri
 import android.os.Build
+import com.verifone.mobile.Keys
 import com.verifone.mobile.dialogs.ErrorDisplayDialog
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -42,6 +43,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         const val keyPaymentsContractProviderParameter = "payments_provider_contract"
         const val keyPaymentsContractProviderPaypalParameter = "payments_provider_contract_paypal"
+        const val keyGiftCardPaymentsContractProviderParameter = "gift_card_payment_provider_contract"
 
         const val keyPaymentsApiUserName = "api_payments_api_user_name"
         const val keyPaymentsApiKey = "api_payments_api_key"
@@ -52,11 +54,8 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         const val keyGooglePayInputMerchantName = "google_pay_input_merchant_name"
         const val keyGooglePayInputMerchantID = "google_pay_input_merchant_id"
 
-
-
         const val keyPaymentCustomerID = "klarnaCustomerID"
         const val keyPaymentOrganizationID = "klarnaOrgID"
-
 
 
 
@@ -115,6 +114,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             return sharedPref.getString(keyPaymentsTokenScope,"")?:""
         }
 
+        fun getGiftCardPaymentsProviderContract(ctx:Context):String {
+            val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
+            return sharedPref.getString(keyGiftCardPaymentsContractProviderParameter,"")?:""
+        }
 
         fun getGooglePayInputGatewayMerchantID(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
@@ -131,14 +134,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             return sharedPref.getString(keyGooglePayInputMerchantID,"")?:""
         }
 
-
         fun getCardEncryptionKey(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
             return sharedPref.getString(keyCardEncryptionKey,"")?:""
         }
-
-
-
 
         fun getPaymentOrgID(ctx:Context):String {
             val sharedPref = ctx.getSharedPreferences("payment_settings_data", Context.MODE_PRIVATE)
@@ -176,8 +175,10 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     lateinit var showRecurrentSwitch:SwitchCompat
     lateinit var removeCardButton:AppCompatButton
+    lateinit var removeGiftCardButton:AppCompatButton
 
     lateinit var showCardCheck:CheckBox
+    lateinit var showGiftCardCheck:CheckBox
     lateinit var showPaypalCheck:CheckBox
     lateinit var showGooglePayCheck:CheckBox
     lateinit var showKlarnaCheck:CheckBox
@@ -194,6 +195,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         if (jsonConfig.has("threeds_contract_id")) jwtContractIDInput.setText(jsonConfig.getString("threeds_contract_id"))
         if (jsonConfig.has("payment_provider_contract")) cardPaymentsProviderContract.setText(jsonConfig.getString("payment_provider_contract"))
         if (jsonConfig.has("paypal_provider_contract")) paypalPaymentsProviderContract.setText(jsonConfig.getString("paypal_provider_contract"))
+        if (jsonConfig.has("gift_card_payment_provider_contract")) giftCardPaymentsProviderContract.setText(jsonConfig.getString("gift_card_payment_provider_contract"))
         if (jsonConfig.has("token_scope")) cardPaymentsReuseTokenScope.setText(jsonConfig.getString("token_scope"))
         if (jsonConfig.has("entity_id")) edKlarnaOrgID.setText(jsonConfig.getString("entity_id"))
         if (jsonConfig.has("customer")) edKlarnaCustomer.setText(jsonConfig.getString("customer"))
@@ -209,6 +211,9 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private val cardPaymentsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_card_payment_provider_contract_edit) }
     private val paypalPaymentsProviderContract by lazy { findViewById<TextInputEditText>(R.id.request_paypal_payment_provider_contract_edit) }
+
+    private val giftCardPaymentsProviderContract by lazy { findViewById<TextInputEditText>(R.id.gift_card_input_data_edit) }
+
     private val cardPaymentsApiUserName by lazy { findViewById<TextInputEditText>(R.id.request_card_api_user_name_edit) }
     private val cardPaymentsApiKey by lazy { findViewById<TextInputEditText>(R.id.request_card_api_key_edit) }
     private val cardPaymentsReuseTokenScope by lazy { findViewById<TextInputEditText>(R.id.request_card_reuse_token_scope_edit) }
@@ -326,6 +331,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         showRecurrentSwitch = findViewById(R.id.show_recurrent_checkbox)
         removeCardButton = findViewById(R.id.delete_card_details)
+        removeGiftCardButton = findViewById(R.id.delete_card_details2)
 
         showSetupLanguageTV = findViewById(R.id.setup_language_display)
         changeLangButton = findViewById(R.id.change_lang_btn)
@@ -333,6 +339,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         currentLanguage = getStoredLanguage(this)
 
         showCardCheck = findViewById(R.id.checkbox_option_card)
+        showGiftCardCheck = findViewById(R.id.checkbox_option_gift_card)
         showPaypalCheck = findViewById(R.id.checkbox_option_paypal)
         showGooglePayCheck = findViewById(R.id.checkbox_option_google_pay)
         showKlarnaCheck = findViewById(R.id.checkbox_option_klarna)
@@ -348,14 +355,21 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         if (currentLanguage.isNotEmpty()){
             showSetupLanguageTV.text = currentLanguage
         } else showSetupLanguageTV.text = "EN"
-        if(getStoredPaymentDetails().isEmpty()){
+        if(getStoredPaymentDetails(Keys.keyRecurrent).isEmpty()){
             removeCardButton.visibility = View.INVISIBLE
         } else {
             removeCardButton.setOnClickListener {
-                removeStoredPaymentDetails()
+                removeStoredPaymentDetails(Keys.keyRecurrent)
             }
         }
 
+        if(getStoredPaymentDetails(Keys.giftCardRecurrentKey).isEmpty()){
+            removeGiftCardButton.visibility = View.INVISIBLE
+        } else {
+            removeGiftCardButton.setOnClickListener {
+                removeStoredPaymentDetails(Keys.giftCardRecurrentKey)
+            }
+        }
 
         backgroundColorInput.addTextChangedListener(textWatchBackground)
         textFieldBackgroundInput.addTextChangedListener(textWatchTextFields)
@@ -371,6 +385,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             saveFontPos(fontOptionPos)
 
             saveShowCard(showCardCheck.isChecked)
+            saveShowGiftCard(showGiftCardCheck.isChecked)
             saveShowPaypal(showPaypalCheck.isChecked)
             saveShowGooglePay(showGooglePayCheck.isChecked)
             saveShowKlarna(showKlarnaCheck.isChecked)
@@ -427,6 +442,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         cardTitleColorCode.setText(sharedPref.getString(keySaveTitleColor,""))
         showRecurrentSwitch.isChecked = sharedPref.getBoolean(keySaveShowRecurrent,false)
         showCardCheck.isChecked = getShowCard()
+        showGiftCardCheck.isChecked = getShowGiftCard()
         showPaypalCheck.isChecked = getShowPaypal()
         showGooglePayCheck.isChecked = getShowGooglePay()
         showKlarnaCheck.isChecked = getShowKlarna()
@@ -442,6 +458,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
         enableThreedsCheck.isChecked = getThreedsUserOption(this)
         cardPaymentsProviderContract.setText(getPaymentsProviderContract(this))
         paypalPaymentsProviderContract.setText(getPaymentsProviderContractPaypal(this))
+        giftCardPaymentsProviderContract.setText(getGiftCardPaymentsProviderContract(this))
         cardPaymentsApiUserName.setText(getPaymentsApiUserID(this))
         cardPaymentsApiKey.setText(getPaymentsApiKey(this))
         cardPaymentsReuseTokenScope.setText(getPaymentsTokenScope(this))
@@ -455,14 +472,14 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     }
 
-    fun removeStoredPaymentDetails() {
+    fun removeStoredPaymentDetails(key: String) {
         val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
-        sharedPref.edit().remove("key_store_rec").apply()
+        sharedPref.edit().remove(key).apply()
         finish()
     }
-    fun getStoredPaymentDetails():String {
+    fun getStoredPaymentDetails(key: String):String {
         val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
-        return sharedPref.getString("key_store_rec","")?:""
+        return sharedPref.getString(key,"")?:""
     }
 
     fun gotoLangSelectionScreen() {
@@ -518,6 +535,18 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
     private fun getShowCard():Boolean {
         val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
         return sharedPref.getBoolean("key_store_show_card",true)
+    }
+
+    private fun saveShowGiftCard(showGiftCard:Boolean) {
+        val sp = getSharedPreferences("checkout_data",Context.MODE_PRIVATE)
+        sp.edit()
+            .putBoolean("key_store_show_gift_card",showGiftCard)
+            .apply()
+    }
+
+    private fun getShowGiftCard():Boolean {
+        val sharedPref = getSharedPreferences("checkout_data", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("key_store_show_gift_card",true)
     }
 
     private fun saveShowPaypal(showPaypal:Boolean) {
@@ -608,6 +637,7 @@ class CustomizationSettings:AppCompatActivity(), AdapterView.OnItemSelectedListe
             .putString(keyPublicEncryptionKeyAlias,jwtKeyAliasInput.text.toString())
             .putString(keyPaymentsContractProviderParameter,cardPaymentsProviderContract.text.toString())
             .putString(keyPaymentsContractProviderPaypalParameter,paypalPaymentsProviderContract.text.toString())
+            .putString(keyGiftCardPaymentsContractProviderParameter,giftCardPaymentsProviderContract.text.toString())
             .putString(keyPaymentsApiUserName,cardPaymentsApiUserName.text.toString())
             .putString(keyPaymentsApiKey,cardPaymentsApiKey.text.toString())
             .putString(keyPaymentsTokenScope, cardPaymentsReuseTokenScope.text.toString())
