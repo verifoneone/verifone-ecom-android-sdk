@@ -36,7 +36,6 @@ dependencies {
 }
 ```
 
-
 The cardinal mobile sdk is optional and only required if you re using the SDK's 3DS features. In order To fetch the cardinal mobile sdk you need to add the following lines in your root gradle build file: build.gradle(Project: ...root)
 
 ```kotlin
@@ -52,9 +51,15 @@ To get the credentials for maven please contact cardinal directly
 
 ```
 
+### Proguard
+If you are allowing minification/shrinking for your release, you should also add these lines to your proguard-rules.pro:
+
+```kotlin
+-keep class org.bouncycastle.jcajce.provider.** { *; }
+-keep class org.bouncycastle.jce.provider.** { *; }
+```
 
 ## Usage
-
 
 Set the payment methods you want to offer and display the list to the customer.
 
