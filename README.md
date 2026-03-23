@@ -5,7 +5,7 @@ Verifone SDKs provide the ability to encrypt and validate card payments, handles
 ### Requirements
 
 - Android Studio Arctic Fox or above
-- Kotlin 1.4.30 or higher
+- Kotlin 1.8.22 or higher
 
 ### Supported Payment Methods
 
@@ -18,7 +18,7 @@ Verifone SDKs provide the ability to encrypt and validate card payments, handles
 The SDK can be built using the assemble gradle task or fetched from the release page in github and added to your build.gradle.
 
 ```kotlin
-implementation files('/path/to/VerifoneAndroidLIB-release-1.1.3.aar')
+implementation files('/path/to/VerifoneAndroidLIB-release-1.3.0.aar')
 ```
 
 ###### Dependencies
@@ -31,7 +31,8 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
     implementation group: 'org.bouncycastle', name: 'bcpg-jdk15on', version: '1.57'
-    implementation 'org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2'
+    implementation 'androidx.activity:activity:1.8.2'
+    implementation 'org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-8'
     ...
 }
 ```

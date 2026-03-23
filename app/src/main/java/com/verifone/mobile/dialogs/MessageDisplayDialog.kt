@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import com.verifone.mobile.R
-import kotlinx.android.synthetic.main.error_screen.view.*
-import kotlinx.android.synthetic.main.message_dialog_layout.view.*
 
 class MessageDisplayDialog: DialogFragment() {
 
@@ -52,9 +52,9 @@ class MessageDisplayDialog: DialogFragment() {
     }
 
     private fun setupView(view: View) {
-        view.tvMessage.text = arguments?.getString(KEY_MESSAGE)
-        view.tvMessage2.text = arguments?.getString(KEY_MESSAGE2)
-        view.close_btn.setOnClickListener {
+        view.findViewById<AppCompatTextView>(R.id.tvMessage).text = arguments?.getString(KEY_MESSAGE)
+        view.findViewById<AppCompatTextView>(R.id.tvMessage2).text = arguments?.getString(KEY_MESSAGE2)
+        view.findViewById<AppCompatButton>(R.id.close_btn).setOnClickListener {
             dismiss()
         }
     }

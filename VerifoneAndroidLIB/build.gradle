@@ -1,9 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -12,6 +11,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     buildTypes {
@@ -24,9 +32,10 @@ android {
 }
 
 dependencies {
-    implementation (name: 'cardinalmobilesdk-2.2.7-2', ext: 'aar')
+    implementation (name: 'cardinalmobilesdk-2.2.7-8', ext: 'aar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.activity:activity:1.8.2'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.klarna.mobile:sdk:2.1.6'

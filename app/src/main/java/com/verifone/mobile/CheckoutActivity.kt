@@ -60,10 +60,8 @@ import com.verifone.mobile.responses.paypal.PayPalResponse
 import com.verifone.mobile.responses.vipps.VippsInitResponse
 import com.verifone.mobile.screens.CustomizationSettings
 
+import android.widget.TextView
 import com.verifone.mobile.screens.PaymentFlowDone
-import kotlinx.android.synthetic.main.activity_checkout.*
-import kotlinx.android.synthetic.main.card_payments_config_data.*
-import kotlinx.android.synthetic.main.mobilepay_input_data.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -701,18 +699,18 @@ open class CheckoutActivity : AppCompatActivity(), LookupRequestDone {
     }
 
     private fun displayGarment(garment: JSONObject) {
-        detailTitle.text = garment.getString("title")
+        findViewById<TextView>(R.id.detailTitle).text = garment.getString("title")
 
         val price = 10.0
-        detailPrice.text = "$price $currencyTV"
+        findViewById<TextView>(R.id.detailPrice).text = "$price $currencyTV"
         amount = price.toString().toDouble()
 
         val escapedHtmlText: String = Html.fromHtml(garment.getString("description")).toString()
-        detailDescription.text = Html.fromHtml(escapedHtmlText)
+        findViewById<TextView>(R.id.detailDescription).text = Html.fromHtml(escapedHtmlText)
 
         val imageUri = "@drawable/${garment.getString("image")}"
         val imageResource = resources.getIdentifier(imageUri, null, packageName)
-        detailImage.setImageResource(imageResource)
+        findViewById<ImageView>(R.id.detailImage).setImageResource(imageResource)
     }
 
     private fun onThreedsSetupDone(deviceID: String) {

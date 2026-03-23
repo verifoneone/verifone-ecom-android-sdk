@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import androidx.appcompat.widget.AppCompatTextView
 import com.verifone.mobile.R
-import kotlinx.android.synthetic.main.error_screen.view.*
 
 class ErrorDisplayDialog: DialogFragment() {
     companion object {
@@ -51,8 +51,8 @@ class ErrorDisplayDialog: DialogFragment() {
     }
 
     private fun setupView(view: View) {
-        view.tvError.text = arguments?.getString(KEY_ERROR)
-        view.tvError2.text = arguments?.getString(KEY_ERROR2)
+        view.findViewById<AppCompatTextView>(R.id.tvError).text = arguments?.getString(KEY_ERROR)
+        view.findViewById<AppCompatTextView>(R.id.tvError2).text = arguments?.getString(KEY_ERROR2)
     }
 
 

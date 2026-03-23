@@ -50,7 +50,7 @@ internal class SwishPaymentActivity:AppCompatActivity() {
         return true
     }
 
-    override fun onNewIntent(intentSW: Intent?) {
+    override fun onNewIntent(intentSW: Intent) {
         super.onNewIntent(intentSW)
         parseToken()
     }

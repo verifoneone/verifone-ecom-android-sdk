@@ -1,14 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     defaultConfig {
@@ -19,6 +22,10 @@ android {
         versionName "3.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -32,9 +39,10 @@ android {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.activity:activity:1.8.2' // Required by Cardinal SDK 2.2.7-8
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -46,9 +54,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-pay:16.1.0"
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
     implementation group: 'org.bouncycastle', name: 'bcpg-jdk15on', version: '1.57'
-    implementation(files("../VerifoneAndroidLIB/build/outputs/aar/VerifoneAndroidLIB-release.aar"))
+    // Use project dependency for local development, or AAR for release builds
 //    implementation(project(path: ":VerifoneAndroidLIB"))
-    implementation (name: 'cardinalmobilesdk-2.2.7-2', ext: 'aar')
+    implementation(files("../VerifoneAndroidLIB/build/outputs/aar/VerifoneAndroidLIB-release-1.3.0.aar"))
+    implementation (name: 'cardinalmobilesdk-2.2.7-8', ext: 'aar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

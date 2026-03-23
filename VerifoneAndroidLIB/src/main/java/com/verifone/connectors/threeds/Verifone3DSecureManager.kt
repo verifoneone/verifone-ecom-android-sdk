@@ -9,6 +9,7 @@ import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalEnvironment
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalRenderType
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalUiType
 import com.cardinalcommerce.cardinalmobilesdk.models.CardinalConfigurationParameters
+import com.cardinalcommerce.cardinalmobilesdk.enums.CCADatabase
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import com.cardinalcommerce.cardinalmobilesdk.services.CardinalInitService
 import com.cardinalcommerce.cardinalmobilesdk.services.CardinalValidateReceiver
@@ -65,6 +66,7 @@ class Verifone3DSecureManager private constructor(
             cardinalConfigurationParameters.environment = CardinalEnvironment.PRODUCTION
         }
 
+        cardinalConfigurationParameters.setCCAUrl(CCADatabase.CGKURLS)
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
         val rTYPE = JSONArray()
